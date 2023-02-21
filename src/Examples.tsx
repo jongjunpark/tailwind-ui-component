@@ -2,17 +2,26 @@ import React from 'react'
 import tw, { TwStyle } from 'twin.macro'
 import {
   Dropdown,
+  Popover,
+  Modal,
+  Tooltip,
   Select,
   Autocomplete,
   Toggle,
   Disclosure,
-  Modal,
-  Popover,
   RadioGroup,
   Tabs,
   Icons,
 } from './components'
+import {
+  CheckIcon,
+  ChevronUpDownIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+  ChevronRightIcon,
+} from '@heroicons/react/20/solid'
 import TransitionDemo from './components/TransitionDemo'
+import ICONS from './icons'
 
 /**
  * Headless UI usage examples
@@ -24,20 +33,71 @@ export default function Examples() {
       <Dropdown
         items={[
           [
-            { label: 'Edit', onClick: () => {} },
-            { label: 'Duplicate', onClick: () => {} },
+            {
+              label: 'Edit',
+              icon: <ICONS.Edit tw="w-5 h-5 mr-2" />,
+              url: '/test',
+            },
+            {
+              label: 'Duplicate',
+              icon: <ICONS.Duplicate tw="w-5 h-5 mr-2" />,
+            },
           ],
           [
-            { label: 'Archive', onClick: () => {} },
-            { label: 'Move', onClick: () => {} },
+            {
+              label: 'Archive',
+              icon: <ICONS.Archive tw="w-5 h-5 mr-2" />,
+            },
+            {
+              label: 'Move',
+              icon: <ICONS.Move tw="w-5 h-5 mr-2" />,
+            },
           ],
-          [{ label: 'Delete', onClick: () => {} }],
+          [
+            {
+              label: 'Delete',
+              icon: <ICONS.Delete tw="w-5 h-5 mr-2" />,
+            },
+          ],
         ]}
+        placement="bottom left"
+        menuItemStyle={active => {
+          return [
+            active ? tw`bg-violet-500 text-white` : tw`text-gray-900`,
+            tw`flex rounded-md items-center w-full p-2 text-sm cursor-pointer`,
+          ]
+        }}
       >
-        Options
+        <div tw="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:(ring-2 ring-white ring-opacity-75)">
+          <span>hi</span>
+          <ChevronDownIcon tw="w-5 h-5 ml-2" />
+        </div>
       </Dropdown>
 
-      <Select
+      <Popover
+        label="Solutions"
+        items={[
+          {
+            name: 'Insights',
+            description: 'Measure actions your users take',
+            href: '#',
+          },
+          {
+            name: 'Automations',
+            description: 'Create your own targeted content',
+            href: '#',
+          },
+          {
+            name: 'Reports',
+            description: 'Keep track of your growth',
+            href: '#',
+          },
+        ]}
+      />
+
+      <Tooltip />
+
+      {/* <Select
         items={[
           { name: 'Wade Cooper' },
           { name: 'Arlene Mccoy' },
@@ -47,6 +107,21 @@ export default function Examples() {
           { name: 'Hellen Schmidt' },
         ]}
       />
+
+      <Modal
+        contentProps={{
+          title: 'Payment successful',
+          content: (
+            <p>
+              Your payment has been successfully submitted. We’ve sent you an
+              email with all of the details of your order.
+            </p>
+          ),
+          closeLabel: 'Got it, thanks!',
+        }}
+      >
+        Open dialog
+      </Modal>
 
       <Autocomplete
         items={[
@@ -78,42 +153,6 @@ export default function Examples() {
           {
             heading: 'Do you offer technical support?',
             content: 'No.',
-          },
-        ]}
-      />
-
-      <Modal
-        contentProps={{
-          title: 'Payment successful',
-          content: (
-            <p>
-              Your payment has been successfully submitted. We’ve sent you an
-              email with all of the details of your order.
-            </p>
-          ),
-          closeLabel: 'Got it, thanks!',
-        }}
-      >
-        Open dialog
-      </Modal>
-
-      <Popover
-        label="Solutions"
-        items={[
-          {
-            name: 'Insights',
-            description: 'Measure actions your users take',
-            href: '#',
-          },
-          {
-            name: 'Automations',
-            description: 'Create your own targeted content',
-            href: '#',
-          },
-          {
-            name: 'Reports',
-            description: 'Keep track of your growth',
-            href: '#',
           },
         ]}
       />
@@ -197,7 +236,7 @@ export default function Examples() {
           ],
         }}
         tabGroupProps={{}}
-      />
+      /> */}
     </Container>
   )
 }
@@ -206,53 +245,30 @@ export default function Examples() {
  * Usage example ends here =====================================================
  */
 
-const exampleData: [string, string, TwStyle][] = [
+const exampleData: [string, TwStyle, string][] = [
   [
-    'Menu (Dropdown)',
-    'https://headlessui.dev/react/menu',
+    'Dropdown',
     tw`to-indigo-500 from-purple-500`,
-  ],
-  [
-    'Listbox (Select)',
-    'https://headlessui.dev/react/listbox',
-    tw`from-amber-300 to-orange-500`,
-  ],
-  [
-    'Combobox (Autocomplete)',
-    'https://headlessui.com/react/combobox',
-    tw`from-teal-400 to-cyan-400`,
-  ],
-  [
-    'Switch (Toggle)',
-    'https://headlessui.dev/react/switch',
-    tw`from-green-400 to-cyan-500`,
-  ],
-  [
-    'Disclosure',
-    'https://headlessui.dev/react/disclosure',
-    tw`from-fuchsia-500 to-purple-600`,
-  ],
-  [
-    'Dialog (Modal)',
-    'https://headlessui.dev/react/dialog',
-    tw`from-sky-400 to-indigo-500`,
+    '링크 목록 등을 표시하기 위해 사용 됨, 주로 네비게이션과 같은 메뉴 표기 용도로 사용되고 카드와 같은 요소에는 popover를 사용',
   ],
   [
     'Popover',
-    'https://headlessui.dev/react/popover',
-    tw`from-orange-400 to-pink-600`,
+    tw`from-sky-400 to-indigo-500`,
+    '추가 정보 또는 작업을 제공하기 위한 팝업 메뉴, 단순 메뉴가 아닌 복잡한 카드형태를 구현하는데에 용이함',
   ],
   [
-    'Radio Group',
-    'https://headlessui.dev/react/radio-group',
-    tw`from-cyan-400 to-sky-500`,
+    'Tooltip',
+    tw`from-sky-400 to-indigo-500`,
+    '마우스 입력(hover/click)에 표시되며 단순한 텍스트 표기에 사용됨, 간단한 설명을 제공하는데에 사용',
   ],
-  [
-    'Transition',
-    'https://headlessui.dev/react/transition',
-    tw`from-pink-500 to-rose-500`,
-  ],
-  ['Tabs', 'https://headlessui.dev/react/tabs', tw`from-sky-400 to-blue-600`],
+  // ['Listbox (Select)', tw`from-amber-300 to-orange-500`],
+  // ['Combobox (Autocomplete)', tw`from-teal-400 to-cyan-400`],
+  // ['Switch (Toggle)', tw`from-green-400 to-cyan-500`],
+  // ['Disclosure', tw`from-fuchsia-500 to-purple-600`],
+  // ['Popover', tw`from-orange-400 to-pink-600`],
+  // ['Radio Group', tw`from-cyan-400 to-sky-500`],
+  // ['Transition', tw`from-pink-500 to-rose-500`],
+  // ['Tabs', tw`from-sky-400 to-blue-600`],
 ]
 
 type ExampleProps = {
@@ -262,25 +278,18 @@ type ExampleProps = {
 }
 
 function Example({ className, children, index }: ExampleProps) {
-  const [heading, demoUrl, gradientStyles] = exampleData[index] || []
+  const [heading, gradientStyles, description] = exampleData[index] || []
   return (
     <div css={[tw`space-y-4`, gradientStyles]}>
-      <h2 tw="text-xl font-bold text-3xl">{heading}</h2>
+      <h2 tw="font-extrabold text-3xl">{heading}</h2>
+      <h3 tw="text-xl font-bold">When To use</h3>
+      <p tw="!mb-6">{description}</p>
       <div
         tw="p-10 relative rounded-xl bg-gradient-to-r shadow-lg text-black"
         {...{ className }}
       >
         {children}
       </div>
-      <a
-        href={demoUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        tw="inline-block"
-      >
-        Docs
-        <Icons.ChevronRight tw="inline w-4 h-4" />
-      </a>
     </div>
   )
 }
@@ -290,7 +299,7 @@ function Container({ children }: { children: React.ReactNode[] }) {
 
   return (
     <div tw="flex flex-col items-center py-36">
-      <div tw="w-full max-w-[500px] space-y-20">
+      <div tw="w-full max-w-[700px] space-y-20">
         {children.map((item, index) => (
           <Example key={index} index={index}>
             {item}

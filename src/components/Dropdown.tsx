@@ -1,42 +1,84 @@
-import tw from 'twin.macro'
+import tw, { TwStyle } from 'twin.macro'
 import React, { Fragment } from 'react'
 import { Menu } from '@headlessui/react'
-import Icons from './Icons'
 import Transition from './Transition'
 
-/**
- * HeadlessUI "Menu (Dropdown)"
- * Customized for twin.macro + typescript
- * https://headlessui.dev/react/menu
- */
+export type DropdownPlacement =
+  | 'bottom left'
+  | 'bottom right'
+  | 'top left'
+  | 'top right'
+  | 'custom'
 
-type DropdownItems = {
+interface DropdownItems {
   label: string
-  onClick: () => void
+  icon?: React.ReactNode
+  url?: string
+  onClick?: () => void
 }
 
-type MenuItemProps = { as?: React.ElementType; disabled?: boolean }
+interface TransitionType {
+  enter?: TwStyle
+  enterFrom?: TwStyle
+  enterTo?: TwStyle
+  leave?: TwStyle
+  leaveFrom?: TwStyle
+  leaveTo?: TwStyle
+}
 
-type DropdownProps = {
+interface MenuItemsProps {
+  as?: React.ElementType
+  static?: boolean
+  unmount?: undefined
+}
+
+interface MenuItemProps {
+  as?: React.ElementType
+  disabled?: boolean
+}
+
+interface DropdownProps {
   items: DropdownItems[][]
-  menuProps?: { as?: React.ElementType }
-  menuItemsProps?: {
-    as?: React.ElementType
-    static?: boolean
-    unmount?: undefined
+  placement?: DropdownPlacement
+  position?: {
+    top?: string
+    bottom?: string
+    left?: string
+    right?: string
   }
+  menuProps?: { as?: React.ElementType }
+  menuItemsProps?: MenuItemsProps
+  menuItemsStyle?: TwStyle
   menuItemProps?: MenuItemProps
+  menuItemStyle?: (active: boolean) => TwStyle[]
+  transitionProps?: TransitionType
   children: React.ReactNode
+}
+
+const transitionPropsDefault = {
+  enter: tw`ease-out duration-100`,
+  enterFrom: tw`opacity-0 scale-75`,
+  enterTo: tw`opacity-100 scale-100`,
+  leave: tw`ease-in duration-75`,
+  leaveFrom: tw`opacity-100 scale-100`,
+  leaveTo: tw`opacity-0 scale-95`,
 }
 
 export default function Dropdown({
   items,
+  placement = 'bottom left',
+  position,
   menuProps,
   menuItemsProps,
+  menuItemsStyle,
   menuItemProps,
+  menuItemStyle,
   children,
+  transitionProps = transitionPropsDefault,
 }: DropdownProps) {
   if (items.length === 0) return null
+
+  const defaultMenuItemsStyle = tw`bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`
 
   return (
     <Menu
@@ -46,10 +88,20 @@ export default function Dropdown({
     >
       {({ open }) => (
         <Fragment>
-          <Label children={children} open={open} />
-          <Transition {...transitionProps}>
+          <Menu.Button>
+            <div css={[open && tw`[& svg]:rotate-180`]}>{children}</div>
+          </Menu.Button>
+          <Transition {...transitionProps} tw="absolute w-full h-full top-0">
             <Menu.Items
-              tw="absolute right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+              css={[
+                tw`absolute`,
+                placement === 'bottom left' && tw`top-full left-0`,
+                placement === 'bottom right' && tw`top-full right-0`,
+                placement === 'top left' && tw`bottom-full left-0`,
+                placement === 'top right' && tw`bottom-full right-0`,
+                placement === 'custom' && { ...position },
+                menuItemsStyle ?? defaultMenuItemsStyle,
+              ]}
               {...menuItemsProps}
             >
               <Fragment>
@@ -58,6 +110,7 @@ export default function Dropdown({
                     key={index}
                     group={group}
                     menuItemProps={menuItemProps}
+                    menuItemStyle={menuItemStyle}
                   />
                 ))}
               </Fragment>
@@ -72,14 +125,21 @@ export default function Dropdown({
 function ItemGroup({
   group,
   menuItemProps,
+  menuItemStyle,
 }: {
   group: DropdownItems[]
   menuItemProps?: MenuItemProps
+  menuItemStyle?: (active: boolean) => TwStyle[]
 }) {
   return (
     <div tw="p-1">
       {group.map((item, index) => (
-        <Item {...item} key={index} menuItemProps={menuItemProps} />
+        <Item
+          {...item}
+          key={index}
+          menuItemProps={menuItemProps}
+          menuItemStyle={menuItemStyle}
+        />
       ))}
     </div>
   )
@@ -87,50 +147,41 @@ function ItemGroup({
 
 function Item({
   label,
+  icon,
+  url,
   menuItemProps,
+  menuItemStyle,
   ...rest
 }: {
   label: string
+  icon?: React.ReactNode
+  url?: string
   menuItemProps?: MenuItemProps
+  menuItemStyle?: (active: boolean) => TwStyle[]
 }) {
-  const Icon = (Icons as { [key: string]: any })[label] || Icons['Edit']
+  const defaultMenuItemStyle = (active: boolean) => {
+    return [
+      active ? tw`bg-violet-500 text-white` : tw`text-gray-900`,
+      tw`flex rounded-md items-center w-full p-2 text-sm cursor-pointer`,
+    ]
+  }
+
   return (
     <Menu.Item key={label} {...menuItemProps}>
       {({ active }: { active: boolean }) => (
-        <button
+        <a
+          href={url}
           css={[
-            active ? tw`bg-violet-500 text-white` : tw`text-gray-900`,
-            tw`flex rounded-md items-center w-full p-2 text-sm`,
+            menuItemStyle
+              ? menuItemStyle(active)
+              : defaultMenuItemStyle(active),
           ]}
           {...rest}
         >
-          {Icon({ active, css: tw`w-5 h-5 mr-2` })}
+          {icon && <div>{icon}</div>}
           {label}
-        </button>
+        </a>
       )}
     </Menu.Item>
   )
-}
-
-type LabelProps = {
-  children: React.ReactNode
-  open: boolean
-}
-
-function Label({ children, open }: LabelProps) {
-  return (
-    <Menu.Button tw="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:(ring-2 ring-white ring-opacity-75)">
-      {children}
-      <Icons.ChevronDown css={open && tw`rotate-180`} />
-    </Menu.Button>
-  )
-}
-
-const transitionProps = {
-  enter: tw`ease-out duration-100`,
-  enterFrom: tw`opacity-0 scale-75`,
-  enterTo: tw`opacity-100 scale-100`,
-  leave: tw`ease-in duration-75`,
-  leaveFrom: tw`opacity-100 scale-100`,
-  leaveTo: tw`opacity-0 scale-95`,
 }
