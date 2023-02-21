@@ -58,6 +58,23 @@ export default function Examples() {
     ],
   ]
 
+  const PopoverContent = () => {
+    const PopoverItemStyle = tw`py-1 px-2 border border-gray-400/70 rounded cursor-pointer hover:text-blue-700 transition-all`
+
+    return (
+      <div tw="bg-white pt-4 pb-5 px-6 rounded w-[400px]">
+        <h3 tw="text-lg mb-2 font-extrabold">카테고리별 검색</h3>
+        <div tw="flex flex-wrap gap-2">
+          <a href="/people" css={[PopoverItemStyle]}>
+            사람
+          </a>
+          <a css={[PopoverItemStyle]}>기업</a>
+          <a css={[PopoverItemStyle]}>채용</a>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <Container>
       <Dropdown
@@ -77,25 +94,17 @@ export default function Examples() {
       </Dropdown>
 
       <Popover
-        label="Solutions"
-        items={[
-          {
-            name: 'Insights',
-            description: 'Measure actions your users take',
-            href: '#',
-          },
-          {
-            name: 'Automations',
-            description: 'Create your own targeted content',
-            href: '#',
-          },
-          {
-            name: 'Reports',
-            description: 'Keep track of your growth',
-            href: '#',
-          },
-        ]}
-      />
+        placement="custom"
+        content={<PopoverContent />}
+        position={{
+          top: 'calc(100% - 4px)',
+          left: '10px',
+        }}
+      >
+        <div tw="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:(ring-2 ring-white ring-opacity-75)">
+          <span>Open Popover</span>
+        </div>
+      </Popover>
 
       <Tooltip />
 
