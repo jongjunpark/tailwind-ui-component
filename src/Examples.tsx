@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import tw, { TwStyle } from 'twin.macro'
 import {
   Dropdown,
@@ -13,13 +13,7 @@ import {
   Tabs,
   Icons,
 } from './components'
-import {
-  CheckIcon,
-  ChevronUpDownIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
-  ChevronRightIcon,
-} from '@heroicons/react/20/solid'
+import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import TransitionDemo from './components/TransitionDemo'
 import ICONS from './icons'
 
@@ -28,6 +22,12 @@ import ICONS from './icons'
  */
 
 export default function Examples() {
+  const [modalShow, setModalShow] = useState<boolean>(false)
+
+  const handleClose = () => {
+    setModalShow(false)
+  }
+
   const dropdownItems = [
     [
       {
@@ -99,7 +99,7 @@ export default function Examples() {
       </Popover>
       <Tooltip
         content="tooltip!"
-        trigger="click"
+        trigger="hover"
         placement="bottom"
         offset={[0, 12]}
       >
@@ -107,6 +107,34 @@ export default function Examples() {
           <span>Tooltip</span>
         </div>
       </Tooltip>
+
+      <div>
+        <button
+          type="button"
+          tw="px-4 py-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:(ring-2 ring-white ring-opacity-75)"
+          onClick={() => setModalShow(true)}
+        >
+          Modal On
+        </button>
+        <Modal
+          title="Payment successful"
+          open={modalShow}
+          onClose={handleClose}
+          width="400px"
+          arrow
+        >
+          <div tw="flex flex-col gap-2">
+            <div>test1</div>
+            <div>test2</div>
+            <button
+              tw="border border-gray-400 rounded-md cursor-pointer mt-1.5 py-1 hover:(border-blue-500 text-blue-500)"
+              onClick={() => setModalShow(false)}
+            >
+              close
+            </button>
+          </div>
+        </Modal>
+      </div>
 
       {/* <Select
         items={[
@@ -118,21 +146,6 @@ export default function Examples() {
           { name: 'Hellen Schmidt' },
         ]}
       />
-
-      <Modal
-        contentProps={{
-          title: 'Payment successful',
-          content: (
-            <p>
-              Your payment has been successfully submitted. We’ve sent you an
-              email with all of the details of your order.
-            </p>
-          ),
-          closeLabel: 'Got it, thanks!',
-        }}
-      >
-        Open dialog
-      </Modal>
 
       <Autocomplete
         items={[
@@ -269,14 +282,18 @@ const exampleData: [string, TwStyle, string][] = [
   ],
   [
     'Tooltip',
-    tw`from-sky-400 to-indigo-500`,
+    tw`from-orange-600 to-yellow-600`,
     '마우스 입력(hover/click)에 표시되며 단순한 텍스트 표기에 사용됨, 간단한 설명을 제공하는데에 사용',
+  ],
+  [
+    'Modal',
+    tw`from-emerald-600 to-teal-900`,
+    '새 페이지로 이동하지 않고 현재 페이지 위에 새로운 박스를 팝업형식으로 띄우는데에 사용',
   ],
   // ['Listbox (Select)', tw`from-amber-300 to-orange-500`],
   // ['Combobox (Autocomplete)', tw`from-teal-400 to-cyan-400`],
   // ['Switch (Toggle)', tw`from-green-400 to-cyan-500`],
   // ['Disclosure', tw`from-fuchsia-500 to-purple-600`],
-  // ['Popover', tw`from-orange-400 to-pink-600`],
   // ['Radio Group', tw`from-cyan-400 to-sky-500`],
   // ['Transition', tw`from-pink-500 to-rose-500`],
   // ['Tabs', tw`from-sky-400 to-blue-600`],
