@@ -97,7 +97,12 @@ export default function Examples() {
           <span>Open Popover</span>
         </div>
       </Popover>
-      <Tooltip content="tooltip!">
+      <Tooltip
+        content="tooltip!"
+        trigger="click"
+        placement="bottom"
+        offset={[0, 12]}
+      >
         <div tw="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:(ring-2 ring-white ring-opacity-75)">
           <span>Tooltip</span>
         </div>
