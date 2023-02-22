@@ -45,10 +45,10 @@ export default function Popover({
   transitionProps = transitionPropsDefault,
   children,
 }: PopoverProps) {
-  let [referenceElement, setReferenceElement] =
+  const [referenceElement, setReferenceElement] =
     useState<HTMLButtonElement | null>()
-  let [popperElement, setPopperElement] = useState<HTMLDivElement | null>()
-  let { styles, attributes } = usePopper(referenceElement, popperElement, {
+  const [popperElement, setPopperElement] = useState<HTMLDivElement | null>()
+  const { styles, attributes } = usePopper(referenceElement, popperElement, {
     placement,
     modifiers: [
       {
