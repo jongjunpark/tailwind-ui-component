@@ -1,14 +1,10 @@
 import tw, { TwStyle } from 'twin.macro'
-import React, { Fragment } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Popover as HeadlessPopover } from '@headlessui/react'
+import type * as PopperJS from '@popperjs/core'
+import { usePopper } from 'react-popper'
 import Transition from './Transition'
 
-export type PopoverPlacement =
-  | 'bottom left'
-  | 'bottom right'
-  | 'top left'
-  | 'top right'
-  | 'custom'
 interface TransitionType {
   enter?: TwStyle
   enterFrom?: TwStyle
@@ -20,13 +16,8 @@ interface TransitionType {
 
 interface PopoverProps {
   content: React.ReactNode
-  placement?: PopoverPlacement
-  position?: {
-    top?: string
-    bottom?: string
-    left?: string
-    right?: string
-  }
+  placement?: PopperJS.Placement
+  offset?: number[]
   panelProps?: {
     as?: React.ElementType
     focus?: boolean
@@ -48,29 +39,39 @@ const transitionPropsDefault = {
 
 export default function Popover({
   content,
-  placement = 'bottom left',
-  position,
+  placement = 'bottom-start',
+  offset,
   panelProps,
   transitionProps = transitionPropsDefault,
   children,
 }: PopoverProps) {
+  let [referenceElement, setReferenceElement] =
+    useState<HTMLButtonElement | null>()
+  let [popperElement, setPopperElement] = useState<HTMLDivElement | null>()
+  let { styles, attributes } = usePopper(referenceElement, popperElement, {
+    placement,
+    modifiers: [
+      {
+        name: 'offset',
+        options: { offset: [offset?.[0] ?? 0, offset?.[1] ?? 0] },
+      },
+    ],
+  })
+
   if (!content) return null
 
   return (
-    <HeadlessPopover tw="relative w-fit">
+    <HeadlessPopover tw="relative">
       <>
-        <HeadlessPopover.Button>{children}</HeadlessPopover.Button>
-        <Transition {...transitionProps} tw="absolute w-full h-full top-0">
+        <HeadlessPopover.Button ref={setReferenceElement}>
+          {children}
+        </HeadlessPopover.Button>
+        <Transition {...transitionProps}>
           <HeadlessPopover.Panel
-            css={[
-              tw`absolute`,
-              tw`z-10`,
-              placement === 'bottom left' && tw`top-full left-0`,
-              placement === 'bottom right' && tw`top-full right-0`,
-              placement === 'top left' && tw`bottom-full left-0`,
-              placement === 'top right' && tw`bottom-full right-0`,
-              placement === 'custom' && { ...position },
-            ]}
+            ref={setPopperElement}
+            style={styles.popper}
+            css={[tw`absolute z-10`]}
+            {...attributes.popper}
             {...panelProps}
           >
             {content}

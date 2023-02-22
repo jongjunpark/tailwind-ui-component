@@ -79,13 +79,8 @@ export default function Examples() {
     <Container>
       <Dropdown
         items={dropdownItems}
-        placement="bottom left"
-        menuItemStyle={active => {
-          return [
-            active ? tw`bg-violet-500 text-white` : tw`text-gray-900`,
-            tw`flex rounded-md items-center w-full p-2 text-sm cursor-pointer`,
-          ]
-        }}
+        placement="bottom-start"
+        menuItemStyle={tw`flex rounded-md items-center w-full p-2 text-sm cursor-pointer text-gray-900 hover:(bg-amber-500 text-white)`}
       >
         <div tw="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:(ring-2 ring-white ring-opacity-75)">
           <span>hi</span>
@@ -94,19 +89,19 @@ export default function Examples() {
       </Dropdown>
 
       <Popover
-        placement="custom"
+        placement="bottom-start"
         content={<PopoverContent />}
-        position={{
-          top: 'calc(100% - 4px)',
-          left: '10px',
-        }}
+        offset={[8, 12]}
       >
         <div tw="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:(ring-2 ring-white ring-opacity-75)">
           <span>Open Popover</span>
         </div>
       </Popover>
-
-      <Tooltip />
+      <Tooltip content="tooltip!">
+        <div tw="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:(ring-2 ring-white ring-opacity-75)">
+          <span>Tooltip</span>
+        </div>
+      </Tooltip>
 
       {/* <Select
         items={[

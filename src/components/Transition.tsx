@@ -4,12 +4,6 @@ import {
 } from '@headlessui/react'
 import { TwStyle } from 'twin.macro'
 
-/**
- * HeadlessUI "Transition"
- * Customized for twin.macro + typescript
- * https://headlessui.dev/react/transition
- */
-
 type TransitionProps = {
   enter?: TwStyle
   enterFrom?: TwStyle
