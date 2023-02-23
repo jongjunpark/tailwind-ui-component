@@ -24,10 +24,15 @@ import ICONS from './icons'
 
 export default function Examples() {
   const [modalShow, setModalShow] = useState<boolean>(false)
+  const [modalShow2, setModalShow2] = useState<boolean>(false)
   const [sidebarShow, setSidebarShow] = useState<boolean>(false)
 
   const handleModalClose = () => {
     setModalShow(false)
+  }
+
+  const handleModalClose2 = () => {
+    setModalShow2(false)
   }
 
   const handleSidebarClose = () => {
@@ -154,12 +159,19 @@ export default function Examples() {
         >
           Modal On
         </button>
+        <button
+          type="button"
+          tw="px-4 py-2 ml-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:(ring-2 ring-white ring-opacity-75)"
+          onClick={() => setModalShow2(true)}
+        >
+          Full Modal On
+        </button>
         <Modal
           title="Payment successful"
           open={modalShow}
           onClose={handleModalClose}
           width="400px"
-          arrow
+          centered
         >
           <div tw="flex flex-col gap-2">
             <div>test1</div>
@@ -167,6 +179,24 @@ export default function Examples() {
             <button
               tw="border border-gray-400 rounded-md cursor-pointer mt-1.5 py-1 hover:(border-blue-500 text-blue-500)"
               onClick={() => setModalShow(false)}
+            >
+              close
+            </button>
+          </div>
+        </Modal>
+        <Modal
+          title="Payment successful"
+          open={modalShow2}
+          onClose={handleModalClose2}
+          close
+          fullScreens={['mobile', 'desktop']}
+        >
+          <div tw="flex flex-col gap-2">
+            <div>test1</div>
+            <div>test2</div>
+            <button
+              tw="border border-gray-400 rounded-md cursor-pointer mt-1.5 py-1 hover:(border-blue-500 text-blue-500)"
+              onClick={() => setModalShow2(false)}
             >
               close
             </button>

@@ -18,17 +18,21 @@ interface PositionType {
   bottom?: string
 }
 
+type ScreenType = 'mobile' | 'tablet' | 'laptop' | 'desktop' | 'all'
+
 interface ModalProps {
   children: React.ReactNode
   title?: string
   titleStyle?: TwStyle
   titleProps?: { as?: React.ElementType }
   transitionProps?: TransitionType
+  contentStyle?: TwStyle
   position?: PositionType
   centered?: boolean
   width?: string
   open: boolean
-  arrow?: boolean
+  close?: boolean
+  fullScreens?: ScreenType[]
   onClose: () => void
 }
 
@@ -47,13 +51,46 @@ export default function Modal({
   titleStyle,
   titleProps,
   transitionProps = transitionPropsDefault,
+  contentStyle,
   position,
   centered = false,
   width,
   open = false,
-  arrow = false,
+  close = false,
+  fullScreens,
   onClose,
 }: ModalProps) {
+  const positionStyle = () => {
+    if (position) {
+      return tw`absolute left-1/2 -translate-x-1/2`
+    }
+    if (centered) {
+      return tw`absolute-center`
+    }
+    return tw`absolute left-1/2 -translate-x-1/2 top-1/4`
+  }
+
+  const fullScreenStyle = (): TwStyle[] => {
+    const commonoStyle =
+      'rounded-none translate-x-0 translate-y-0 top-0 left-0 bottom-0 right-0'
+    const screenStyle = fullScreens?.map(screen => {
+      if (screen === 'mobile')
+        return tw`only-mobile:(max-w-full h-full ${commonoStyle})`
+      if (screen === 'tablet')
+        return tw`only-tablet:(max-w-full h-full ${commonoStyle})`
+      if (screen === 'laptop')
+        return tw`only-laptop:(max-w-full h-full ${commonoStyle})`
+      if (screen === 'desktop')
+        return tw`only-desktop:(max-w-full h-full ${commonoStyle})`
+      return tw`max-w-full h-full ${commonoStyle}`
+    })
+
+    if (screenStyle && screenStyle?.length > 0) {
+      return [...screenStyle]
+    }
+    return []
+  }
+
   return (
     <Fragment>
       <Transition appear show={open} as={Fragment}>
@@ -68,22 +105,20 @@ export default function Modal({
                 <Dialog.Panel
                   css={[
                     tw`w-full transform overflow-hidden rounded bg-white text-left align-middle shadow-xl transition-all`,
+                    contentStyle,
                     width
                       ? {
                           maxWidth: width,
                         }
                       : tw`max-w-md`,
-                    position
-                      ? tw`absolute left-1/2 -translate-x-1/2`
-                      : centered
-                      ? tw`absolute-center`
-                      : tw`absolute left-1/2 -translate-x-1/2 top-1/4`,
+                    positionStyle(),
                     {
                       ...position,
                     },
+                    ...fullScreenStyle(),
                   ]}
                 >
-                  {arrow && (
+                  {close && (
                     <div
                       tw="absolute top-1 right-2.5 w-8 h-8 cursor-pointer flex justify-center items-center"
                       onClick={onClose}
