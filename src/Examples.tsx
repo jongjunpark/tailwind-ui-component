@@ -5,6 +5,7 @@ import {
   Popover,
   Modal,
   Tooltip,
+  Sidebar,
   Select,
   Autocomplete,
   Toggle,
@@ -23,9 +24,14 @@ import ICONS from './icons'
 
 export default function Examples() {
   const [modalShow, setModalShow] = useState<boolean>(false)
+  const [sidebarShow, setSidebarShow] = useState<boolean>(false)
 
-  const handleClose = () => {
+  const handleModalClose = () => {
     setModalShow(false)
+  }
+
+  const handleSidebarClose = () => {
+    setSidebarShow(false)
   }
 
   const dropdownItems = [
@@ -75,6 +81,38 @@ export default function Examples() {
     )
   }
 
+  const SidebarContent = () => {
+    const LinkItem = ({ url, content }: any) => {
+      return (
+        <li tw="py-3 px-6 text-center cursor-pointer hover:(bg-gray-100)">
+          <a href={url}>{content}</a>
+        </li>
+      )
+    }
+
+    return (
+      <nav tw="bg-white w-60 h-full">
+        <div tw="flex justify-between items-center mb-6 pt-4 px-6">
+          <div
+            tw="w-8 h-8 cursor-pointer"
+            onClick={() => setSidebarShow(false)}
+          >
+            <ICONS.Close />
+          </div>
+          <div tw="w-8 h-8">
+            <ICONS.Logo />
+          </div>
+        </div>
+        <ul>
+          <LinkItem url="/" content="홈" />
+          <LinkItem url="/people" content="사람" />
+          <LinkItem url="/companies" content="기업" />
+          <LinkItem url="job" content="채용" />
+        </ul>
+      </nav>
+    )
+  }
+
   return (
     <Container>
       <Dropdown
@@ -93,9 +131,9 @@ export default function Examples() {
         content={<PopoverContent />}
         offset={[8, 12]}
       >
-        <div tw="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:(ring-2 ring-white ring-opacity-75)">
+        <button tw="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:(ring-2 ring-white ring-opacity-75)">
           <span>Open Popover</span>
-        </div>
+        </button>
       </Popover>
       <Tooltip
         content="tooltip!"
@@ -103,9 +141,9 @@ export default function Examples() {
         placement="bottom"
         offset={[0, 12]}
       >
-        <div tw="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:(ring-2 ring-white ring-opacity-75)">
+        <button tw="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:(ring-2 ring-white ring-opacity-75)">
           <span>Tooltip</span>
-        </div>
+        </button>
       </Tooltip>
 
       <div>
@@ -119,7 +157,7 @@ export default function Examples() {
         <Modal
           title="Payment successful"
           open={modalShow}
-          onClose={handleClose}
+          onClose={handleModalClose}
           width="400px"
           arrow
         >
@@ -134,6 +172,23 @@ export default function Examples() {
             </button>
           </div>
         </Modal>
+      </div>
+
+      <div>
+        <button
+          type="button"
+          tw="px-4 py-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:(ring-2 ring-white ring-opacity-75)"
+          onClick={() => setSidebarShow(true)}
+        >
+          Sidebar On
+        </button>
+        <Sidebar
+          open={sidebarShow}
+          onClose={handleSidebarClose}
+          placement="left"
+        >
+          <SidebarContent />
+        </Sidebar>
       </div>
 
       {/* <Select
@@ -289,6 +344,11 @@ const exampleData: [string, TwStyle, string][] = [
     'Modal',
     tw`from-emerald-600 to-teal-900`,
     '새 페이지로 이동하지 않고 현재 페이지 위에 새로운 박스를 팝업형식으로 띄우는데에 사용',
+  ],
+  [
+    'Sidebar',
+    tw`from-cyan-600 to-blue-600`,
+    '측면에 메뉴를 숨겨두고 사용하는데에 사용',
   ],
   // ['Listbox (Select)', tw`from-amber-300 to-orange-500`],
   // ['Combobox (Autocomplete)', tw`from-teal-400 to-cyan-400`],
