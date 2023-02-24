@@ -27,6 +27,7 @@ export default function Examples() {
   const [modalShow, setModalShow] = useState<boolean>(false)
   const [modalShow2, setModalShow2] = useState<boolean>(false)
   const [sidebarShow, setSidebarShow] = useState<boolean>(false)
+  const [selectValue, setSelectValue] = useState<string>('')
 
   const handleModalClose = () => {
     setModalShow(false)
@@ -118,6 +119,345 @@ export default function Examples() {
       </nav>
     )
   }
+
+  const selectItems = [
+    {
+      value: '+82',
+      name: (
+        <div tw="flex gap-2 items-center [width: max-content]">
+          <img
+            src="https://cdn.pixabay.com/photo/2013/07/13/14/17/south-korea-162427__340.png"
+            alt=""
+            tw="w-6 h-4"
+          />
+          <div>대한민국</div>
+          <div tw="text-gray-600">+82</div>
+        </div>
+      ),
+      selectedName: (
+        <div tw="flex gap-2 items-center [width: max-content]">
+          <img
+            src="https://cdn.pixabay.com/photo/2013/07/13/14/17/south-korea-162427__340.png"
+            alt=""
+            tw="w-6 h-4"
+          />
+          <div tw="text-gray-600">+82</div>
+        </div>
+      ),
+    },
+    {
+      value: '+233',
+      name: (
+        <div tw="flex gap-2 items-center [width: max-content]">
+          <img
+            src="https://cdn.pixabay.com/photo/2015/11/06/13/29/union-jack-1027898__340.jpg"
+            alt=""
+            tw="w-6 h-4"
+          />
+          <div>영국</div>
+          <div tw="text-gray-600">+233</div>
+        </div>
+      ),
+      selectedName: (
+        <div tw="flex gap-2 items-center [width: max-content]">
+          <img
+            src="https://cdn.pixabay.com/photo/2015/11/06/13/29/union-jack-1027898__340.jpg"
+            alt=""
+            tw="w-6 h-4"
+          />
+          <div tw="text-gray-600">+233</div>
+        </div>
+      ),
+    },
+    {
+      value: '+123',
+      name: (
+        <div tw="flex gap-2 items-center [width: max-content]">
+          <img
+            src="https://cdn.pixabay.com/photo/2017/03/14/21/00/american-flag-2144392__340.png"
+            alt=""
+            tw="w-6 h-4"
+          />
+          <div>미국</div>
+          <div tw="text-gray-600">+123</div>
+        </div>
+      ),
+      selectedName: (
+        <div tw="flex gap-2 items-center [width: max-content]">
+          <img
+            src="https://cdn.pixabay.com/photo/2017/03/14/21/00/american-flag-2144392__340.png"
+            alt=""
+            tw="w-6 h-4"
+          />
+          <div tw="text-gray-600">+123</div>
+        </div>
+      ),
+    },
+    {
+      value: '+23',
+      name: (
+        <div tw="flex gap-2 items-center [width: max-content]">
+          <img
+            src="https://cdn.pixabay.com/photo/2018/01/26/17/15/swiss-flag-3109178__340.png"
+            alt=""
+            tw="w-6 h-4"
+          />
+          <div>스위스</div>
+          <div tw="text-gray-600">+23</div>
+        </div>
+      ),
+      selectedName: (
+        <div tw="flex gap-2 items-center [width: max-content]">
+          <img
+            src="https://cdn.pixabay.com/photo/2018/01/26/17/15/swiss-flag-3109178__340.png"
+            alt=""
+            tw="w-6 h-4"
+          />
+          <div tw="text-gray-600">+23</div>
+        </div>
+      ),
+    },
+    {
+      value: '+65',
+      name: (
+        <div tw="flex gap-2 items-center [width: max-content]">
+          <img
+            src="https://cdn.pixabay.com/photo/2013/07/13/14/17/sweden-162433__340.png"
+            alt=""
+            tw="w-6 h-4"
+          />
+          <div>스웨덴</div>
+          <div tw="text-gray-600">+65</div>
+        </div>
+      ),
+      selectedName: (
+        <div tw="flex gap-2 items-center [width: max-content]">
+          <img
+            src="https://cdn.pixabay.com/photo/2013/07/13/14/17/sweden-162433__340.png"
+            alt=""
+            tw="w-6 h-4"
+          />
+          <div tw="text-gray-600">+65</div>
+        </div>
+      ),
+    },
+    {
+      value: '+32',
+      name: (
+        <div tw="flex gap-2 items-center [width: max-content]">
+          <img
+            src="https://cdn.pixabay.com/photo/2013/07/13/14/15/greece-162304__340.png"
+            alt=""
+            tw="w-6 h-4"
+          />
+          <div>그리스</div>
+          <div tw="text-gray-600">+32</div>
+        </div>
+      ),
+      selectedName: (
+        <div tw="flex gap-2 items-center [width: max-content]">
+          <img
+            src="https://cdn.pixabay.com/photo/2013/07/13/14/15/greece-162304__340.png"
+            alt=""
+            tw="w-6 h-4"
+          />
+          <div tw="text-gray-600">+32</div>
+        </div>
+      ),
+    },
+    {
+      value: '+53',
+      name: (
+        <div tw="flex gap-2 items-center [width: max-content]">
+          <img
+            src="https://cdn.pixabay.com/photo/2013/07/13/14/17/saudi-arabia-162413__340.png"
+            alt=""
+            tw="w-6 h-4"
+          />
+          <div tw="[flex-shrink: 0]">사우디아라비아</div>
+          <div tw="text-gray-600">+53</div>
+        </div>
+      ),
+      selectedName: (
+        <div tw="flex gap-2 items-center [width: max-content]">
+          <img
+            src="https://cdn.pixabay.com/photo/2013/07/13/14/17/saudi-arabia-162413__340.png"
+            alt=""
+            tw="w-6 h-4"
+          />
+          <div tw="text-gray-600">+53</div>
+        </div>
+      ),
+    },
+    {
+      value: '+12',
+      name: (
+        <div tw="flex gap-2 items-center [width: max-content]">
+          <img
+            src="https://cdn.pixabay.com/photo/2013/07/13/14/15/japan-162328__340.png"
+            alt=""
+            tw="w-6 h-4"
+          />
+          <div>일본</div>
+          <div tw="text-gray-600">+12</div>
+        </div>
+      ),
+      selectedName: (
+        <div tw="flex gap-2 items-center [width: max-content]">
+          <img
+            src="https://cdn.pixabay.com/photo/2013/07/13/14/15/japan-162328__340.png"
+            alt=""
+            tw="w-6 h-4"
+          />
+          <div tw="text-gray-600">+12</div>
+        </div>
+      ),
+    },
+    {
+      value: '+50',
+      name: (
+        <div tw="flex gap-2 items-center [width: max-content]">
+          <img
+            src="https://cdn.pixabay.com/photo/2013/07/13/14/16/netherlands-162372__340.png"
+            alt=""
+            tw="w-6 h-4"
+          />
+          <div>네덜란드</div>
+          <div tw="text-gray-600">+50</div>
+        </div>
+      ),
+      selectedName: (
+        <div tw="flex gap-2 items-center [width: max-content]">
+          <img
+            src="https://cdn.pixabay.com/photo/2013/07/13/14/16/netherlands-162372__340.png"
+            alt=""
+            tw="w-6 h-4"
+          />
+          <div tw="text-gray-600">+50</div>
+        </div>
+      ),
+    },
+    {
+      value: '+40',
+      name: (
+        <div tw="flex gap-2 items-center [width: max-content]">
+          <img
+            src="https://cdn.pixabay.com/photo/2013/07/13/14/15/france-162295__340.png"
+            alt=""
+            tw="w-6 h-4"
+          />
+          <div>프랑스</div>
+          <div tw="text-gray-600">+40</div>
+        </div>
+      ),
+      selectedName: (
+        <div tw="flex gap-2 items-center [width: max-content]">
+          <img
+            src="https://cdn.pixabay.com/photo/2013/07/13/14/15/france-162295__340.png"
+            alt=""
+            tw="w-6 h-4"
+          />
+          <div tw="text-gray-600">+40</div>
+        </div>
+      ),
+    },
+    {
+      value: '+30',
+      name: (
+        <div tw="flex gap-2 items-center [width: max-content]">
+          <img
+            src="https://cdn.pixabay.com/photo/2013/07/13/14/15/germany-162301__340.png"
+            alt=""
+            tw="w-6 h-4"
+          />
+          <div>독일</div>
+          <div tw="text-gray-600">+30</div>
+        </div>
+      ),
+      selectedName: (
+        <div tw="flex gap-2 items-center [width: max-content]">
+          <img
+            src="https://cdn.pixabay.com/photo/2013/07/13/14/15/germany-162301__340.png"
+            alt=""
+            tw="w-6 h-4"
+          />
+          <div tw="text-gray-600">+30</div>
+        </div>
+      ),
+    },
+    {
+      value: '+20',
+      name: (
+        <div tw="flex gap-2 items-center [width: max-content]">
+          <img
+            src="https://cdn.pixabay.com/photo/2013/07/13/14/17/senegal-162414__340.png"
+            alt=""
+            tw="w-6 h-4"
+          />
+          <div>세네갈</div>
+          <div tw="text-gray-600">+20</div>
+        </div>
+      ),
+      selectedName: (
+        <div tw="flex gap-2 items-center [width: max-content]">
+          <img
+            src="https://cdn.pixabay.com/photo/2013/07/13/14/17/senegal-162414__340.png"
+            alt=""
+            tw="w-6 h-4"
+          />
+          <div tw="text-gray-600">+20</div>
+        </div>
+      ),
+    },
+    {
+      value: '+10',
+      name: (
+        <div tw="flex gap-2 items-center [width: max-content]">
+          <img
+            src="https://cdn.pixabay.com/photo/2013/07/13/14/17/spain-162428__340.png"
+            alt=""
+            tw="w-6 h-4"
+          />
+          <div>스페인</div>
+          <div tw="text-gray-600">+10</div>
+        </div>
+      ),
+      selectedName: (
+        <div tw="flex gap-2 items-center [width: max-content]">
+          <img
+            src="https://cdn.pixabay.com/photo/2013/07/13/14/17/spain-162428__340.png"
+            alt=""
+            tw="w-6 h-4"
+          />
+          <div tw="text-gray-600">+10</div>
+        </div>
+      ),
+    },
+    {
+      value: '+128',
+      name: (
+        <div tw="flex gap-2 items-center [width: max-content]">
+          <img
+            src="https://cdn.pixabay.com/photo/2013/07/13/14/17/turkey-162445__340.png"
+            alt=""
+            tw="w-6 h-4"
+          />
+          <div>터키</div>
+          <div tw="text-gray-600">+128</div>
+        </div>
+      ),
+      selectedName: (
+        <div tw="flex gap-2 items-center [width: max-content]">
+          <img
+            src="https://cdn.pixabay.com/photo/2013/07/13/14/17/turkey-162445__340.png"
+            alt=""
+            tw="w-6 h-4"
+          />
+          <div tw="text-gray-600">+120</div>
+        </div>
+      ),
+    },
+  ]
 
   return (
     <Container>
@@ -222,6 +562,23 @@ export default function Examples() {
         </Sidebar>
       </div>
 
+      <div tw="w-48 h-10">
+        <Select
+          items={selectItems}
+          onChange={value => {
+            setSelectValue(value)
+          }}
+          value={selectValue}
+          showArrow
+          arrow={
+            <div tw="w-5 h-5">
+              <ICONS.Logo />
+            </div>
+          }
+          placeholder="지역번호를 입력하세요"
+        />
+      </div>
+
       <Breadcrumb
         items={[
           {
@@ -248,7 +605,7 @@ export default function Examples() {
         ]}
       />
 
-      {/* <Select
+      {/* <Autocomplete
         items={[
           { name: 'Wade Cooper' },
           { name: 'Arlene Mccoy' },
@@ -257,9 +614,9 @@ export default function Examples() {
           { name: 'Tanya Fox' },
           { name: 'Hellen Schmidt' },
         ]}
-      />
+      /> */}
 
-      <Autocomplete
+      {/* <Select
         items={[
           { name: 'Wade Cooper' },
           { name: 'Arlene Mccoy' },
@@ -408,12 +765,16 @@ const exampleData: [string, TwStyle, string][] = [
     '측면에 메뉴를 숨겨두고 사용하는데에 사용',
   ],
   [
+    'Select (Autocomplete)',
+    tw`from-pink-500 to-rose-500`,
+    'Select 태그의 커스텀 버전',
+  ],
+  [
     'Breadcrumb',
     tw`from-white to-white`,
     '시스템의 계층을 알려주는데에 사용 혹은 현재 페이지의 위치를 알려줌',
   ],
   // ['Listbox (Select)', tw`from-amber-300 to-orange-500`],
-  // ['Combobox (Autocomplete)', tw`from-teal-400 to-cyan-400`],
   // ['Switch (Toggle)', tw`from-green-400 to-cyan-500`],
   // ['Disclosure', tw`from-fuchsia-500 to-purple-600`],
   // ['Radio Group', tw`from-cyan-400 to-sky-500`],

@@ -1,135 +1,203 @@
-import tw from 'twin.macro'
-import React, { Fragment, useState } from 'react'
-import { Listbox } from '@headlessui/react'
-import Icons from './Icons'
+import tw, { TwStyle } from 'twin.macro'
+import React, { useEffect, useRef, useState } from 'react'
+import { Popover as HeadlessPopover } from '@headlessui/react'
+import { usePopper } from 'react-popper'
 import Transition from './Transition'
+import { ChevronDownIcon } from '@heroicons/react/20/solid'
 
-/**
- * HeadlessUI "Listbox (Select)"
- * Customized for twin.macro + typescript
- * https://headlessui.dev/react/listbox
- */
+interface TransitionType {
+  enter?: TwStyle
+  enterFrom?: TwStyle
+  enterTo?: TwStyle
+  leave?: TwStyle
+  leaveFrom?: TwStyle
+  leaveTo?: TwStyle
+}
 
-type ListboxOption = { name: string }
+interface SelectItemType {
+  value: string
+  name?: string | React.ReactNode
+  selectedName?: string | React.ReactNode
+}
 
-type SelectProps = {
-  items: ListboxOption[]
-  listboxProps?: {
+type PlacementType =
+  | 'bottom'
+  | 'bottom-start'
+  | 'bottom-end'
+  | 'top'
+  | 'top-start'
+  | 'top-end'
+
+interface SelectProps {
+  items: SelectItemType[]
+  placement?: PlacementType
+  offset?: number[]
+  panelProps?: {
     as?: React.ElementType
-    disabled?: boolean
-    value?: string
-    onChange?: () => void
-    horizontal?: boolean
-  }
-  listboxOptionsProps?: {
-    as?: React.ElementType
+    focus?: boolean
     static?: boolean
     unmount?: undefined
   }
+  transitionProps?: TransitionType
+  disabled?: boolean
+  value?: string
+  initialValue?: string
+  onChange?: (
+    value: string,
+    name?: string | React.ReactNode,
+    selectedName?: string | React.ReactNode,
+  ) => void
+  placeholder?: string
+  showArrow?: boolean
+  arrow?: React.ReactNode
+  inputStyle?: TwStyle
+  inputItemStyle?: TwStyle
 }
 
-type OptionProps = {
-  label: string
-  active: boolean
-  selected: boolean
+const transitionPropsDefault = {
+  enter: tw`transition ease-out duration-200`,
+  enterFrom: tw`opacity-0 -translate-y-1`,
+  enterTo: tw`opacity-100 translate-y-0`,
+  leave: tw`transition ease-in duration-150`,
+  leaveFrom: tw`opacity-100 translate-y-0`,
+  leaveTo: tw`opacity-0 -translate-y-1`,
 }
 
 export default function Select({
   items,
-  listboxProps,
-  listboxOptionsProps,
+  placement = 'bottom-start',
+  offset,
+  panelProps,
+  transitionProps = transitionPropsDefault,
+  disabled,
+  value,
+  initialValue,
+  onChange,
+  placeholder,
+  showArrow,
+  arrow,
+  inputStyle,
+  inputItemStyle,
 }: SelectProps) {
-  const [selected, setSelected] = useState(items[0])
+  const [selected, setSelected] = useState<string | undefined>(initialValue)
+  const [query, setQuery] = useState('')
+  const [referenceElement, setReferenceElement] =
+    useState<HTMLButtonElement | null>()
+  const [popperElement, setPopperElement] = useState<HTMLDivElement | null>()
+  const { styles, attributes } = usePopper(referenceElement, popperElement, {
+    placement,
+    modifiers: [
+      {
+        name: 'offset',
+        options: { offset: [offset?.[0] ?? 0, offset?.[1] ?? 8] },
+      },
+    ],
+  })
+  const selectedRef = useRef<HTMLDivElement>(null)
 
-  if (items.length === 0) return null
+  useEffect(() => {
+    value && setSelected(value)
+  }, [value])
 
-  return (
-    <Listbox
-      value={selected}
-      tw="focus-within:z-10 relative"
-      onChange={setSelected}
-      {...listboxProps}
-    >
-      {({ open }) => (
-        <div>
-          <Label text={selected?.name} open={open} />
-          <Transition {...transitionProps}>
-            {items.length > 0 && (
-              <Listbox.Options
-                tw="absolute w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
-                {...listboxOptionsProps}
-              >
-                {items.map(ListboxOption)}
-              </Listbox.Options>
-            )}
-          </Transition>
-        </div>
-      )}
-    </Listbox>
-  )
-}
+  if (!items) return null
 
-function ListboxOption(item: ListboxOption, index: number) {
-  return (
-    <Listbox.Option as={Fragment} key={index} value={item}>
-      {props => <Option label={item.name} {...props} />}
-    </Listbox.Option>
-  )
-}
+  const filteredItems =
+    query === ''
+      ? items
+      : items.filter(
+          item =>
+            item.name ??
+            item.value
+              .toLowerCase()
+              .replace(/\s+/g, '')
+              .includes(query.toLowerCase().replace(/\s+/g, '')),
+        )
 
-function Label({ text }: { text: string; open: boolean }) {
-  return (
-    <Listbox.Button tw="relative w-full py-2 pl-3 pr-10 text-left bg-white rounded-lg shadow-md cursor-default focus:outline-none focus-visible:(ring-2 ring-opacity-75 ring-white ring-offset-orange-300 ring-offset-2 border-indigo-500) sm:text-sm">
-      <span tw="block truncate">{text}</span>
-      <span tw="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-        <Icons.ChevronUpDownIcon
-          tw="w-5 h-5 text-gray-400"
-          aria-hidden="true"
-        />
-      </span>
-    </Listbox.Button>
-  )
-}
+  const handleClickItem = (item: SelectItemType, close: () => void) => {
+    if (value === undefined) {
+      setSelected(item.value)
+    } else {
+      onChange && onChange(item.value, item?.name, item?.selectedName)
+    }
+    close()
+  }
 
-const Option = React.forwardRef(
-  (
-    { label, active, selected, ...rest }: OptionProps,
-    ref: React.ForwardedRef<HTMLDivElement>,
-  ) => {
+  const getItemValue = () => {
+    const selectedItemIndex = items.findIndex(item => item.value === selected)
+
     return (
-      <div
-        css={[
-          tw`cursor-default select-none relative py-2 pl-10 pr-4`,
-          active ? tw`text-amber-900 bg-amber-100` : tw`text-gray-900`,
-        ]}
-        ref={ref}
-        {...rest}
-      >
-        <span
-          css={[
-            tw`block truncate`,
-            selected ? tw`font-medium` : tw`font-normal`,
-          ]}
+      items?.[selectedItemIndex]?.selectedName ??
+      items?.[selectedItemIndex]?.value
+    )
+  }
+
+  const findElementScroll = (open: boolean) => {
+    if (open) selectedRef.current && selectedRef.current.scrollIntoView()
+  }
+
+  return (
+    <HeadlessPopover tw="relative w-full h-full">
+      <>
+        <HeadlessPopover.Button
+          ref={setReferenceElement}
+          tw="w-full h-full"
+          disabled={disabled}
         >
-          {label}
-        </span>
-        {selected && (
-          <span
+          <div
             css={[
-              tw`absolute inset-y-0 left-0 flex items-center pl-3`,
-              active ? tw`text-amber-600` : tw`text-amber-600`,
+              tw`relative w-full h-full p-4 flex items-center gap-1 cursor-pointer overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm`,
+              disabled && tw`cursor-not-allowed`,
+              showArrow && tw`pr-10`,
+              inputStyle,
             ]}
           >
-            <Icons.CheckIcon tw="w-5 h-5" aria-hidden="true" />
-          </span>
-        )}
-      </div>
-    )
-  },
-)
-
-const transitionProps = {
-  leave: tw`transition ease-in duration-100`,
-  leaveFrom: tw`opacity-100`,
-  leaveTo: tw`opacity-0`,
+            <div tw="text-ellipsis overflow-hidden whitespace-nowrap">
+              {getItemValue()}
+            </div>
+            {showArrow && (
+              <div tw="absolute top-1/2 right-3 -translate-y-1/2">
+                {arrow ?? <ChevronDownIcon tw="w-5 h-5" />}
+              </div>
+            )}
+            {placeholder && !selected && (
+              <div tw="w-full text-ellipsis overflow-hidden whitespace-nowrap text-gray-500">
+                {placeholder}
+              </div>
+            )}
+          </div>
+        </HeadlessPopover.Button>
+        <Transition {...transitionProps}>
+          <HeadlessPopover.Panel
+            ref={setPopperElement}
+            style={styles.popper}
+            css={[tw`absolute z-10`]}
+            {...attributes.popper}
+            {...panelProps}
+          >
+            {({ open, close }) => (
+              <>
+                {findElementScroll(open)}
+                <div tw="bg-white p-1 rounded max-h-64 overflow-y-auto [box-shadow: 0 6px 16px 0 rgb(0 0 0 / 8%), 0 3px 6px -4px rgb(0 0 0 / 12%), 0 9px 28px 8px rgb(0 0 0 / 5%)]">
+                  {items?.map(item => (
+                    <div
+                      key={item?.value}
+                      css={[
+                        tw`cursor-pointer px-4 py-2 text-sm transition hover:(bg-gray-100)`,
+                        inputItemStyle,
+                        selected === item?.value && tw`bg-gray-100`,
+                      ]}
+                      onClick={() => handleClickItem(item, close)}
+                      ref={selected === item?.value ? selectedRef : null}
+                    >
+                      {item?.name ?? item?.value}
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+          </HeadlessPopover.Panel>
+        </Transition>
+      </>
+    </HeadlessPopover>
+  )
 }
