@@ -576,6 +576,7 @@ export default function Examples() {
             </div>
           }
           placeholder="지역번호를 입력하세요"
+          showSearch
         />
       </div>
 
@@ -605,7 +606,7 @@ export default function Examples() {
         ]}
       />
 
-      {/* <Autocomplete
+      <Autocomplete
         items={[
           { name: 'Wade Cooper' },
           { name: 'Arlene Mccoy' },
@@ -614,7 +615,7 @@ export default function Examples() {
           { name: 'Tanya Fox' },
           { name: 'Hellen Schmidt' },
         ]}
-      /> */}
+      />
 
       {/* <Select
         items={[
@@ -768,6 +769,11 @@ const exampleData: [string, TwStyle, string][] = [
     'Select (Autocomplete)',
     tw`from-pink-500 to-rose-500`,
     'Select 태그의 커스텀 버전',
+  ],
+  [
+    'Breadcrumb',
+    tw`from-white to-white`,
+    '시스템의 계층을 알려주는데에 사용 혹은 현재 페이지의 위치를 알려줌',
   ],
   [
     'Breadcrumb',

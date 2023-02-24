@@ -52,6 +52,7 @@ interface SelectProps {
   arrow?: React.ReactNode
   inputStyle?: TwStyle
   inputItemStyle?: TwStyle
+  showSearch?: boolean
 }
 
 const transitionPropsDefault = {
@@ -78,9 +79,11 @@ export default function Select({
   arrow,
   inputStyle,
   inputItemStyle,
+  showSearch,
 }: SelectProps) {
   const [selected, setSelected] = useState<string | undefined>(initialValue)
   const [query, setQuery] = useState('')
+  const [isFocus, setIsFocus] = useState(false)
   const [referenceElement, setReferenceElement] =
     useState<HTMLButtonElement | null>()
   const [popperElement, setPopperElement] = useState<HTMLDivElement | null>()
@@ -93,10 +96,15 @@ export default function Select({
       },
     ],
   })
+  const scrollBox = useRef<HTMLDivElement>(null)
   const selectedRef = useRef<HTMLDivElement>(null)
+  const searchInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    value && setSelected(value)
+    if (value) {
+      setSelected(value)
+      setQuery(value)
+    }
   }, [value])
 
   if (!items) return null
@@ -104,18 +112,17 @@ export default function Select({
   const filteredItems =
     query === ''
       ? items
-      : items.filter(
-          item =>
-            item.name ??
-            item.value
-              .toLowerCase()
-              .replace(/\s+/g, '')
-              .includes(query.toLowerCase().replace(/\s+/g, '')),
+      : items.filter(item =>
+          item.value
+            .toLowerCase()
+            .replace(/\s+/g, '')
+            .includes(query.toLowerCase().replace(/\s+/g, '')),
         )
 
   const handleClickItem = (item: SelectItemType, close: () => void) => {
     if (value === undefined) {
       setSelected(item.value)
+      setQuery(item.value)
     } else {
       onChange && onChange(item.value, item?.name, item?.selectedName)
     }
@@ -131,8 +138,14 @@ export default function Select({
     )
   }
 
-  const findElementScroll = (open: boolean) => {
-    if (open) selectedRef.current && selectedRef.current.scrollIntoView()
+  const openHandle = (open: boolean) => {
+    if (open) {
+      searchInputRef.current && searchInputRef.current.focus()
+    }
+    if (open && scrollBox.current && selectedRef.current) {
+      scrollBox.current.scrollTop =
+        selectedRef.current.offsetTop - scrollBox.current.offsetTop
+    }
   }
 
   return (
@@ -151,15 +164,29 @@ export default function Select({
               inputStyle,
             ]}
           >
-            <div tw="text-ellipsis overflow-hidden whitespace-nowrap">
-              {getItemValue()}
-            </div>
+            {/* 
+              TODO: value만 표기되는 것 추후에 수정 (필요시)
+            */}
+            {showSearch ? (
+              <input
+                type="text"
+                value={query}
+                onChange={e => setQuery(e.target.value)}
+                ref={searchInputRef}
+                placeholder={placeholder}
+                css={[tw`outline-0 w-full`]}
+              />
+            ) : (
+              <div tw="text-ellipsis overflow-hidden whitespace-nowrap">
+                {getItemValue()}
+              </div>
+            )}
             {showArrow && (
               <div tw="absolute top-1/2 right-3 -translate-y-1/2">
                 {arrow ?? <ChevronDownIcon tw="w-5 h-5" />}
               </div>
             )}
-            {placeholder && !selected && (
+            {placeholder && !showSearch && !selected && (
               <div tw="w-full text-ellipsis overflow-hidden whitespace-nowrap text-gray-500">
                 {placeholder}
               </div>
@@ -176,28 +203,65 @@ export default function Select({
           >
             {({ open, close }) => (
               <>
-                {findElementScroll(open)}
-                <div tw="bg-white p-1 rounded max-h-64 overflow-y-auto [box-shadow: 0 6px 16px 0 rgb(0 0 0 / 8%), 0 3px 6px -4px rgb(0 0 0 / 12%), 0 9px 28px 8px rgb(0 0 0 / 5%)]">
-                  {items?.map(item => (
-                    <div
-                      key={item?.value}
-                      css={[
-                        tw`cursor-pointer px-4 py-2 text-sm transition hover:(bg-gray-100)`,
-                        inputItemStyle,
-                        selected === item?.value && tw`bg-gray-100`,
-                      ]}
-                      onClick={() => handleClickItem(item, close)}
-                      ref={selected === item?.value ? selectedRef : null}
-                    >
-                      {item?.name ?? item?.value}
-                    </div>
-                  ))}
-                </div>
+                {openHandle(open)}
+                <SelectItems
+                  items={showSearch ? filteredItems : items}
+                  inputItemStyle={inputItemStyle}
+                  selected={selected}
+                  close={close}
+                  handleClickItem={handleClickItem}
+                  scrollBox={scrollBox}
+                  selectedRef={selectedRef}
+                />
               </>
             )}
           </HeadlessPopover.Panel>
         </Transition>
       </>
     </HeadlessPopover>
+  )
+}
+
+function SelectItems({
+  items,
+  inputItemStyle,
+  selected,
+  close,
+  handleClickItem,
+  scrollBox,
+  selectedRef,
+}: {
+  items: SelectItemType[]
+  inputItemStyle?: TwStyle
+  selected: string | undefined
+  close: () => void
+  handleClickItem: (item: SelectItemType, close: () => void) => void
+  scrollBox?: React.RefObject<HTMLDivElement>
+  selectedRef?: React.RefObject<HTMLDivElement>
+}) {
+  return (
+    <>
+      {items?.length > 0 ? (
+        <div
+          tw="bg-white p-1 rounded max-h-64 overflow-y-auto [box-shadow: 0 6px 16px 0 rgb(0 0 0 / 8%), 0 3px 6px -4px rgb(0 0 0 / 12%), 0 9px 28px 8px rgb(0 0 0 / 5%)]"
+          ref={scrollBox}
+        >
+          {items?.map(item => (
+            <div
+              key={item?.value}
+              css={[
+                tw`cursor-pointer px-4 py-2 text-sm transition hover:(bg-gray-100)`,
+                inputItemStyle,
+                selected === item?.value && tw`bg-gray-100`,
+              ]}
+              onClick={() => handleClickItem(item, close)}
+              ref={selected === item?.value ? selectedRef : null}
+            >
+              {item?.name ?? item?.value}
+            </div>
+          ))}
+        </div>
+      ) : null}
+    </>
   )
 }
