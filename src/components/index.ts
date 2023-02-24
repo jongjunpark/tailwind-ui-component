@@ -1,4 +1,5 @@
 export { default as Autocomplete } from './Autocomplete'
+export { default as Breadcrumb } from './Breadcrumb'
 export { default as Disclosure } from './Disclosure'
 export { default as Dropdown } from './Dropdown'
 export { default as Icons } from './Icons'

@@ -6,6 +6,7 @@ import {
   Modal,
   Tooltip,
   Sidebar,
+  Breadcrumb,
   Select,
   Autocomplete,
   Toggle,
@@ -221,6 +222,32 @@ export default function Examples() {
         </Sidebar>
       </div>
 
+      <Breadcrumb
+        items={[
+          {
+            name: '홈',
+            url: '/',
+          },
+          {
+            name: '계정',
+            url: '',
+          },
+          {
+            name: '내 정보',
+            url: '/my-inform',
+            disabled: true,
+          },
+          {
+            name: '수정',
+            url: '/my-inform/edit',
+          },
+          {
+            name: '탈퇴',
+            url: '/my-inform/edit/withdraw',
+          },
+        ]}
+      />
+
       {/* <Select
         items={[
           { name: 'Wade Cooper' },
@@ -379,6 +406,11 @@ const exampleData: [string, TwStyle, string][] = [
     'Sidebar',
     tw`from-cyan-600 to-blue-600`,
     '측면에 메뉴를 숨겨두고 사용하는데에 사용',
+  ],
+  [
+    'Breadcrumb',
+    tw`from-white to-white`,
+    '시스템의 계층을 알려주는데에 사용 혹은 현재 페이지의 위치를 알려줌',
   ],
   // ['Listbox (Select)', tw`from-amber-300 to-orange-500`],
   // ['Combobox (Autocomplete)', tw`from-teal-400 to-cyan-400`],
