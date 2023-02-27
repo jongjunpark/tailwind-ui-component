@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import tw, { TwStyle } from 'twin.macro'
 import {
   Dropdown,
@@ -14,10 +14,16 @@ import {
   RadioGroup,
   Tabs,
   Icons,
+  Pagination,
 } from './components'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import TransitionDemo from './components/TransitionDemo'
 import ICONS from './icons'
+import usePagination from 'hooks/usePagination'
+import { DropdownItems } from 'samples/DropdownItems'
+import PopoverContent from 'samples/PopoverContent'
+import SidebarContent from 'samples/SidebarContent'
+import { SelectItems } from 'samples/SelectItems'
 
 /**
  * Headless UI usage examples
@@ -28,6 +34,22 @@ export default function Examples() {
   const [modalShow2, setModalShow2] = useState<boolean>(false)
   const [sidebarShow, setSidebarShow] = useState<boolean>(false)
   const [selectValue, setSelectValue] = useState<string>('')
+  const {
+    page,
+    pageButtons,
+    pageSize,
+    maxRatio,
+    currentRatio,
+    setTotalCount,
+    setPageSize,
+    changePage,
+    prevPage,
+    nextPage,
+  } = usePagination()
+
+  useEffect(() => {
+    setTotalCount(100)
+  }, [])
 
   const handleModalClose = () => {
     setModalShow(false)
@@ -41,428 +63,10 @@ export default function Examples() {
     setSidebarShow(false)
   }
 
-  const dropdownItems = [
-    [
-      {
-        label: 'Edit',
-        icon: <ICONS.Edit tw="w-5 h-5 mr-2" />,
-        url: '/test',
-      },
-      {
-        label: 'Duplicate',
-        icon: <ICONS.Duplicate tw="w-5 h-5 mr-2" />,
-      },
-    ],
-    [
-      {
-        label: 'Archive',
-        icon: <ICONS.Archive tw="w-5 h-5 mr-2" />,
-      },
-      {
-        label: 'Move',
-        icon: <ICONS.Move tw="w-5 h-5 mr-2" />,
-      },
-    ],
-    [
-      {
-        label: 'Delete',
-        icon: <ICONS.Delete tw="w-5 h-5 mr-2" />,
-      },
-    ],
-  ]
-
-  const PopoverContent = () => {
-    const PopoverItemStyle = tw`py-1 px-2 border border-gray-400/70 rounded cursor-pointer hover:text-blue-700 transition-all`
-
-    return (
-      <div tw="bg-white pt-4 pb-5 px-6 rounded w-[400px]">
-        <h3 tw="text-lg mb-2 font-extrabold">카테고리별 검색</h3>
-        <div tw="flex flex-wrap gap-2">
-          <a href="/people" css={[PopoverItemStyle]}>
-            사람
-          </a>
-          <a css={[PopoverItemStyle]}>기업</a>
-          <a css={[PopoverItemStyle]}>채용</a>
-        </div>
-      </div>
-    )
-  }
-
-  const SidebarContent = () => {
-    const LinkItem = ({ url, content }: any) => {
-      return (
-        <li tw="py-3 px-6 text-center cursor-pointer hover:(bg-gray-100)">
-          <a href={url}>{content}</a>
-        </li>
-      )
-    }
-
-    return (
-      <nav tw="bg-white w-60 h-full">
-        <div tw="flex justify-between items-center mb-6 pt-4 px-6">
-          <div
-            tw="w-8 h-8 cursor-pointer"
-            onClick={() => setSidebarShow(false)}
-          >
-            <ICONS.Close />
-          </div>
-          <div tw="w-8 h-8">
-            <ICONS.Logo />
-          </div>
-        </div>
-        <ul>
-          <LinkItem url="/" content="홈" />
-          <LinkItem url="/people" content="사람" />
-          <LinkItem url="/companies" content="기업" />
-          <LinkItem url="job" content="채용" />
-        </ul>
-      </nav>
-    )
-  }
-
-  const selectItems = [
-    {
-      value: '+82',
-      name: (
-        <div tw="flex gap-2 items-center [width: max-content]">
-          <img
-            src="https://cdn.pixabay.com/photo/2013/07/13/14/17/south-korea-162427__340.png"
-            alt=""
-            tw="w-6 h-4"
-          />
-          <div>대한민국</div>
-          <div tw="text-gray-600">+82</div>
-        </div>
-      ),
-      selectedName: (
-        <div tw="flex gap-2 items-center [width: max-content]">
-          <img
-            src="https://cdn.pixabay.com/photo/2013/07/13/14/17/south-korea-162427__340.png"
-            alt=""
-            tw="w-6 h-4"
-          />
-          <div tw="text-gray-600">+82</div>
-        </div>
-      ),
-    },
-    {
-      value: '+233',
-      name: (
-        <div tw="flex gap-2 items-center [width: max-content]">
-          <img
-            src="https://cdn.pixabay.com/photo/2015/11/06/13/29/union-jack-1027898__340.jpg"
-            alt=""
-            tw="w-6 h-4"
-          />
-          <div>영국</div>
-          <div tw="text-gray-600">+233</div>
-        </div>
-      ),
-      selectedName: (
-        <div tw="flex gap-2 items-center [width: max-content]">
-          <img
-            src="https://cdn.pixabay.com/photo/2015/11/06/13/29/union-jack-1027898__340.jpg"
-            alt=""
-            tw="w-6 h-4"
-          />
-          <div tw="text-gray-600">+233</div>
-        </div>
-      ),
-    },
-    {
-      value: '+123',
-      name: (
-        <div tw="flex gap-2 items-center [width: max-content]">
-          <img
-            src="https://cdn.pixabay.com/photo/2017/03/14/21/00/american-flag-2144392__340.png"
-            alt=""
-            tw="w-6 h-4"
-          />
-          <div>미국</div>
-          <div tw="text-gray-600">+123</div>
-        </div>
-      ),
-      selectedName: (
-        <div tw="flex gap-2 items-center [width: max-content]">
-          <img
-            src="https://cdn.pixabay.com/photo/2017/03/14/21/00/american-flag-2144392__340.png"
-            alt=""
-            tw="w-6 h-4"
-          />
-          <div tw="text-gray-600">+123</div>
-        </div>
-      ),
-    },
-    {
-      value: '+23',
-      name: (
-        <div tw="flex gap-2 items-center [width: max-content]">
-          <img
-            src="https://cdn.pixabay.com/photo/2018/01/26/17/15/swiss-flag-3109178__340.png"
-            alt=""
-            tw="w-6 h-4"
-          />
-          <div>스위스</div>
-          <div tw="text-gray-600">+23</div>
-        </div>
-      ),
-      selectedName: (
-        <div tw="flex gap-2 items-center [width: max-content]">
-          <img
-            src="https://cdn.pixabay.com/photo/2018/01/26/17/15/swiss-flag-3109178__340.png"
-            alt=""
-            tw="w-6 h-4"
-          />
-          <div tw="text-gray-600">+23</div>
-        </div>
-      ),
-    },
-    {
-      value: '+65',
-      name: (
-        <div tw="flex gap-2 items-center [width: max-content]">
-          <img
-            src="https://cdn.pixabay.com/photo/2013/07/13/14/17/sweden-162433__340.png"
-            alt=""
-            tw="w-6 h-4"
-          />
-          <div>스웨덴</div>
-          <div tw="text-gray-600">+65</div>
-        </div>
-      ),
-      selectedName: (
-        <div tw="flex gap-2 items-center [width: max-content]">
-          <img
-            src="https://cdn.pixabay.com/photo/2013/07/13/14/17/sweden-162433__340.png"
-            alt=""
-            tw="w-6 h-4"
-          />
-          <div tw="text-gray-600">+65</div>
-        </div>
-      ),
-    },
-    {
-      value: '+32',
-      name: (
-        <div tw="flex gap-2 items-center [width: max-content]">
-          <img
-            src="https://cdn.pixabay.com/photo/2013/07/13/14/15/greece-162304__340.png"
-            alt=""
-            tw="w-6 h-4"
-          />
-          <div>그리스</div>
-          <div tw="text-gray-600">+32</div>
-        </div>
-      ),
-      selectedName: (
-        <div tw="flex gap-2 items-center [width: max-content]">
-          <img
-            src="https://cdn.pixabay.com/photo/2013/07/13/14/15/greece-162304__340.png"
-            alt=""
-            tw="w-6 h-4"
-          />
-          <div tw="text-gray-600">+32</div>
-        </div>
-      ),
-    },
-    {
-      value: '+53',
-      name: (
-        <div tw="flex gap-2 items-center [width: max-content]">
-          <img
-            src="https://cdn.pixabay.com/photo/2013/07/13/14/17/saudi-arabia-162413__340.png"
-            alt=""
-            tw="w-6 h-4"
-          />
-          <div tw="[flex-shrink: 0]">사우디아라비아</div>
-          <div tw="text-gray-600">+53</div>
-        </div>
-      ),
-      selectedName: (
-        <div tw="flex gap-2 items-center [width: max-content]">
-          <img
-            src="https://cdn.pixabay.com/photo/2013/07/13/14/17/saudi-arabia-162413__340.png"
-            alt=""
-            tw="w-6 h-4"
-          />
-          <div tw="text-gray-600">+53</div>
-        </div>
-      ),
-    },
-    {
-      value: '+12',
-      name: (
-        <div tw="flex gap-2 items-center [width: max-content]">
-          <img
-            src="https://cdn.pixabay.com/photo/2013/07/13/14/15/japan-162328__340.png"
-            alt=""
-            tw="w-6 h-4"
-          />
-          <div>일본</div>
-          <div tw="text-gray-600">+12</div>
-        </div>
-      ),
-      selectedName: (
-        <div tw="flex gap-2 items-center [width: max-content]">
-          <img
-            src="https://cdn.pixabay.com/photo/2013/07/13/14/15/japan-162328__340.png"
-            alt=""
-            tw="w-6 h-4"
-          />
-          <div tw="text-gray-600">+12</div>
-        </div>
-      ),
-    },
-    {
-      value: '+50',
-      name: (
-        <div tw="flex gap-2 items-center [width: max-content]">
-          <img
-            src="https://cdn.pixabay.com/photo/2013/07/13/14/16/netherlands-162372__340.png"
-            alt=""
-            tw="w-6 h-4"
-          />
-          <div>네덜란드</div>
-          <div tw="text-gray-600">+50</div>
-        </div>
-      ),
-      selectedName: (
-        <div tw="flex gap-2 items-center [width: max-content]">
-          <img
-            src="https://cdn.pixabay.com/photo/2013/07/13/14/16/netherlands-162372__340.png"
-            alt=""
-            tw="w-6 h-4"
-          />
-          <div tw="text-gray-600">+50</div>
-        </div>
-      ),
-    },
-    {
-      value: '+40',
-      name: (
-        <div tw="flex gap-2 items-center [width: max-content]">
-          <img
-            src="https://cdn.pixabay.com/photo/2013/07/13/14/15/france-162295__340.png"
-            alt=""
-            tw="w-6 h-4"
-          />
-          <div>프랑스</div>
-          <div tw="text-gray-600">+40</div>
-        </div>
-      ),
-      selectedName: (
-        <div tw="flex gap-2 items-center [width: max-content]">
-          <img
-            src="https://cdn.pixabay.com/photo/2013/07/13/14/15/france-162295__340.png"
-            alt=""
-            tw="w-6 h-4"
-          />
-          <div tw="text-gray-600">+40</div>
-        </div>
-      ),
-    },
-    {
-      value: '+30',
-      name: (
-        <div tw="flex gap-2 items-center [width: max-content]">
-          <img
-            src="https://cdn.pixabay.com/photo/2013/07/13/14/15/germany-162301__340.png"
-            alt=""
-            tw="w-6 h-4"
-          />
-          <div>독일</div>
-          <div tw="text-gray-600">+30</div>
-        </div>
-      ),
-      selectedName: (
-        <div tw="flex gap-2 items-center [width: max-content]">
-          <img
-            src="https://cdn.pixabay.com/photo/2013/07/13/14/15/germany-162301__340.png"
-            alt=""
-            tw="w-6 h-4"
-          />
-          <div tw="text-gray-600">+30</div>
-        </div>
-      ),
-    },
-    {
-      value: '+20',
-      name: (
-        <div tw="flex gap-2 items-center [width: max-content]">
-          <img
-            src="https://cdn.pixabay.com/photo/2013/07/13/14/17/senegal-162414__340.png"
-            alt=""
-            tw="w-6 h-4"
-          />
-          <div>세네갈</div>
-          <div tw="text-gray-600">+20</div>
-        </div>
-      ),
-      selectedName: (
-        <div tw="flex gap-2 items-center [width: max-content]">
-          <img
-            src="https://cdn.pixabay.com/photo/2013/07/13/14/17/senegal-162414__340.png"
-            alt=""
-            tw="w-6 h-4"
-          />
-          <div tw="text-gray-600">+20</div>
-        </div>
-      ),
-    },
-    {
-      value: '+10',
-      name: (
-        <div tw="flex gap-2 items-center [width: max-content]">
-          <img
-            src="https://cdn.pixabay.com/photo/2013/07/13/14/17/spain-162428__340.png"
-            alt=""
-            tw="w-6 h-4"
-          />
-          <div>스페인</div>
-          <div tw="text-gray-600">+10</div>
-        </div>
-      ),
-      selectedName: (
-        <div tw="flex gap-2 items-center [width: max-content]">
-          <img
-            src="https://cdn.pixabay.com/photo/2013/07/13/14/17/spain-162428__340.png"
-            alt=""
-            tw="w-6 h-4"
-          />
-          <div tw="text-gray-600">+10</div>
-        </div>
-      ),
-    },
-    {
-      value: '+128',
-      name: (
-        <div tw="flex gap-2 items-center [width: max-content]">
-          <img
-            src="https://cdn.pixabay.com/photo/2013/07/13/14/17/turkey-162445__340.png"
-            alt=""
-            tw="w-6 h-4"
-          />
-          <div>터키</div>
-          <div tw="text-gray-600">+128</div>
-        </div>
-      ),
-      selectedName: (
-        <div tw="flex gap-2 items-center [width: max-content]">
-          <img
-            src="https://cdn.pixabay.com/photo/2013/07/13/14/17/turkey-162445__340.png"
-            alt=""
-            tw="w-6 h-4"
-          />
-          <div tw="text-gray-600">+120</div>
-        </div>
-      ),
-    },
-  ]
-
   return (
     <Container>
       <Dropdown
-        items={dropdownItems}
+        items={DropdownItems}
         placement="bottom-start"
         menuItemStyle={tw`flex rounded-md items-center w-full p-2 text-sm cursor-pointer text-gray-900 hover:(bg-amber-500 text-white)`}
       >
@@ -558,13 +162,13 @@ export default function Examples() {
           onClose={handleSidebarClose}
           placement="left"
         >
-          <SidebarContent />
+          <SidebarContent setSidebarShow={setSidebarShow} />
         </Sidebar>
       </div>
 
       <div tw="w-48 h-10">
         <Select
-          items={selectItems}
+          items={SelectItems}
           onChange={value => {
             setSelectValue(value)
           }}
@@ -605,6 +209,18 @@ export default function Examples() {
           },
         ]}
       />
+
+      <div>
+        <Pagination
+          page={page}
+          pageButtons={pageButtons}
+          maxRatio={maxRatio}
+          currentRatio={currentRatio}
+          changePage={changePage}
+          prevPage={prevPage}
+          nextPage={nextPage}
+        />
+      </div>
 
       <Autocomplete
         items={[
