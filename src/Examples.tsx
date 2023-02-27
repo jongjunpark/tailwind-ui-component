@@ -24,20 +24,32 @@ import { DropdownItems } from './samples/DropdownItems'
 import PopoverContent from './samples/PopoverContent'
 import SidebarContent from './samples/SidebarContent'
 import { SelectItems } from './samples/SelectItems'
+import axios from 'axios'
 
-/**
- * Headless UI usage examples
- */
+interface ContentType {
+  id: number
+  content: string
+  createdAt: string
+  updatedAt: string
+  UserId: number
+  User: {
+    name: string
+    username: string
+    email: string
+  }
+}
 
 export default function Examples() {
   const [modalShow, setModalShow] = useState<boolean>(false)
   const [modalShow2, setModalShow2] = useState<boolean>(false)
   const [sidebarShow, setSidebarShow] = useState<boolean>(false)
   const [selectValue, setSelectValue] = useState<string>('')
+  const [contents, setContents] = useState<ContentType[]>([])
   const {
     page,
     pageButtons,
     pageSize,
+    maxPage,
     maxRatio,
     currentRatio,
     setTotalCount,
@@ -48,8 +60,12 @@ export default function Examples() {
   } = usePagination()
 
   useEffect(() => {
-    setTotalCount(100)
+    setPageSize(5)
   }, [])
+
+  useEffect(() => {
+    getPaginationSamples(page, pageSize)
+  }, [page, pageSize])
 
   const handleModalClose = () => {
     setModalShow(false)
@@ -61,6 +77,13 @@ export default function Examples() {
 
   const handleSidebarClose = () => {
     setSidebarShow(false)
+  }
+
+  const getPaginationSamples = async (page: number, pageSize: number) => {
+    const result = await axios.get('https://koreanjson.com/comments')
+    setTotalCount(result?.data?.length)
+    const paged = result?.data?.slice((page - 1) * pageSize, page * pageSize)
+    setContents(paged)
   }
 
   return (
@@ -180,7 +203,6 @@ export default function Examples() {
             </div>
           }
           placeholder="지역번호를 입력하세요"
-          showSearch
         />
       </div>
 
@@ -210,10 +232,22 @@ export default function Examples() {
         ]}
       />
 
-      <div>
+      <div tw="flex flex-col gap-4">
+        {contents?.map(content => (
+          <div tw="p-4 border border-gray-600 rounded-lg">
+            <div tw="mb-1">
+              <span tw="font-bold">{content.User?.username}</span>
+              <span tw="text-gray-500 text-sm ml-2">
+                {new Date(content.updatedAt).toLocaleString()}
+              </span>
+            </div>
+            <div>{content.content}</div>
+          </div>
+        ))}
         <Pagination
           page={page}
           pageButtons={pageButtons}
+          maxPage={maxPage}
           maxRatio={maxRatio}
           currentRatio={currentRatio}
           changePage={changePage}
@@ -222,7 +256,7 @@ export default function Examples() {
         />
       </div>
 
-      <Autocomplete
+      {/* <Select
         items={[
           { name: 'Wade Cooper' },
           { name: 'Arlene Mccoy' },
@@ -233,7 +267,7 @@ export default function Examples() {
         ]}
       />
 
-      {/* <Select
+      <Autocomplete
         items={[
           { name: 'Wade Cooper' },
           { name: 'Arlene Mccoy' },
@@ -392,9 +426,9 @@ const exampleData: [string, TwStyle, string][] = [
     '시스템의 계층을 알려주는데에 사용 혹은 현재 페이지의 위치를 알려줌',
   ],
   [
-    'Breadcrumb',
+    'Pagination',
     tw`from-white to-white`,
-    '시스템의 계층을 알려주는데에 사용 혹은 현재 페이지의 위치를 알려줌',
+    '컨텐츠를 여러 페이지로 분리하여 탐색 및 이동할 수 있도록 도와주는데에 사용',
   ],
   // ['Listbox (Select)', tw`from-amber-300 to-orange-500`],
   // ['Switch (Toggle)', tw`from-green-400 to-cyan-500`],
