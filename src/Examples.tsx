@@ -19,11 +19,11 @@ import {
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import TransitionDemo from './components/TransitionDemo'
 import ICONS from './icons'
-import usePagination from 'hooks/usePagination'
-import { DropdownItems } from 'samples/DropdownItems'
-import PopoverContent from 'samples/PopoverContent'
-import SidebarContent from 'samples/SidebarContent'
-import { SelectItems } from 'samples/SelectItems'
+import usePagination from './hooks/usePagination'
+import { DropdownItems } from './samples/DropdownItems'
+import PopoverContent from './samples/PopoverContent'
+import SidebarContent from './samples/SidebarContent'
+import { SelectItems } from './samples/SelectItems'
 
 /**
  * Headless UI usage examples
