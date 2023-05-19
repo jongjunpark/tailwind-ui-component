@@ -1,54 +1,44 @@
-import {
-  Transition as HeadlessUiTransition,
-  TransitionEvents,
-} from '@headlessui/react'
-import { TwStyle } from 'twin.macro'
+import type {
+  ReactNode,
+  JSXElementConstructor,
+  ComponentClass,
+  ComponentProps,
+  FC,
+} from 'react'
 
-type TransitionProps = {
-  enter?: TwStyle
-  enterFrom?: TwStyle
-  enterTo?: TwStyle
-  entered?: TwStyle
-  leave?: TwStyle
-  leaveFrom?: TwStyle
-  leaveTo?: TwStyle
-  children: React.ReactNode
-  show?: boolean
-  as?: React.ElementType
-  appear?: boolean
-  unmount?: boolean
-} & TransitionEvents
+import type { TransitionEvents, TransitionClasses } from '@headlessui/react'
+import { Transition as HeadlessUiTransition } from '@headlessui/react'
 
-export default function Transition(props: TransitionProps) {
-  return <HeadlessUiTransition {...getProps(props)} />
-}
-
-Transition.Child = function TransitionChild(props: TransitionProps) {
-  return <HeadlessUiTransition.Child {...getProps(props)} />
-}
-
-function getProps(props: TransitionProps) {
-  return {
-    ...props,
-    enter: 'enter',
-    enterFrom: 'enter-from',
-    enterTo: 'enter-to',
-    entered: 'entered',
-    leave: 'leave',
-    leaveFrom: 'leave-from',
-    leaveTo: 'leave-to',
-    css: {
-      '&.enter': props.enter,
-      '&.enter-from': props.enterFrom,
-      '&.enter-to': props.enterTo,
-      '&.entered': props.entered,
-      '&.leave': props.leave,
-      '&.leave-from': props.leaveFrom,
-      '&.leave-to': props.leaveTo,
-    },
-    beforeEnter: () => props.beforeEnter?.(),
-    afterEnter: () => props.afterEnter?.(),
-    beforeLeave: () => props.beforeLeave?.(),
-    afterLeave: () => props.afterLeave?.(),
+type BaseProps = TransitionEvents &
+  TransitionClasses & {
+    as?: keyof JSX.IntrinsicElements | JSXElementConstructor<any>
+    children: ReactNode
+    unmount?: boolean
   }
+type RootClassType = ComponentClass<(typeof HeadlessUiTransition)['Root']>
+type RootProps = Omit<ComponentProps<RootClassType>, 'displayName'> &
+  BaseProps & {
+    show?: boolean
+    appear?: boolean
+  }
+type RootType = FC<RootProps>
+type ChildClassType = ComponentClass<(typeof HeadlessUiTransition)['Child']>
+type ChildProps = Omit<ComponentProps<ChildClassType>, 'displayName'> &
+  BaseProps & {
+    appear?: boolean
+  }
+type ChildType = FC<ChildProps>
+const TransitionRoot: RootType = props => {
+  return <HeadlessUiTransition.Root {...props} className="relative z-popover" />
 }
+
+const TransitionChild: ChildType = props => {
+  return <HeadlessUiTransition.Child {...props} />
+}
+
+const Transition = Object.assign(TransitionRoot, {
+  Root: TransitionRoot,
+  Child: TransitionChild,
+})
+
+export default Transition
