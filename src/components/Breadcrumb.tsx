@@ -1,5 +1,4 @@
-import tw, { TwStyle } from 'twin.macro'
-import React from 'react'
+import { cls } from '../utils/common'
 
 interface BreadcrumbItemType {
   name: string
@@ -11,24 +10,27 @@ interface BreadcrumbProps {
   items: BreadcrumbItemType[]
 }
 
-export default function Breadcrumb({ items }: BreadcrumbProps) {
+const Breadcrumb = ({ items }: BreadcrumbProps) => {
   return (
-    <div tw="flex items-center text-sm gap-1.5">
-      {items?.map((item, idx) => (
+    <div className="my-8 flex items-center gap-4 text-11 leading-18">
+      {items.map((item, idx) => (
         <>
           <a
             href={item.url}
-            css={[
-              tw`text-gray-500 transition hover:(text-black)`,
-              (item.disabled || !item.url || items?.length === idx + 1) &&
-                tw`pointer-events-none`,
-            ]}
+            className={cls(
+              'text-gray-500 transition hover:text-black',
+              item.disabled || !item.url || items.length === idx + 1
+                ? 'pointer-events-none'
+                : '',
+            )}
           >
             {item.name}
           </a>
-          {items?.length > idx + 1 && <div tw="text-gray-300">/</div>}
+          {items.length > idx + 1 && <div className="text-gray-300">/</div>}
         </>
       ))}
     </div>
   )
 }
+
+export default Breadcrumb
