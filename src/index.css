@@ -1,3 +1,119 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  a {
+    @apply cursor-pointer transition;
+  }
+  a:hover {
+    @apply text-rocket-blue;
+  }
+  a > * {
+    color: initial;
+  }
+}
+
+@layer components {
+  .input {
+    height: 42px;
+    padding: 0 14px;
+    border: 1px solid #d9dfeb;
+    background: #ffffff;
+    font-size: 14px;
+    border-radius: 4px;
+  }
+  .input:focus {
+    outline: none;
+    border-color: #4e61ff;
+  }
+  
+  .scrollbar::-webkit-scrollbar {
+    width: 10px;
+  }
+  .scrollbar::-webkit-scrollbar-track {
+    box-shadow: inset 0px 0px 5px transparent;
+  }
+  .scrollbar::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.2);
+    background-clip: padding-box;
+    border: 2px solid transparent;
+  }
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+  .scrollbar::-webkit-scrollbar-thumb:active {
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+
+  .scrollbar-horizontal::-webkit-scrollbar {
+    height: 10px;
+  }
+  .scrollbar-horizontal::-webkit-scrollbar-track {
+    box-shadow: inset 0px 0px 5px transparent;
+  }
+  .scrollbar-horizontal::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.2);
+    background-clip: padding-box;
+    border: 2px solid transparent;
+  }
+  .scrollbar-horizontal::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+  .scrollbar-horizontal::-webkit-scrollbar-thumb:active {
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+
+  .switch {
+    @apply relative inline-block h-20 w-32;
+  }
+  .switch > input {
+    @apply h-0 w-0 opacity-0;
+  }
+  .switch > div {
+    @apply absolute top-1/2 h-14 w-full -translate-y-1/2 cursor-pointer rounded-lg bg-rocket-haze transition;
+  }
+  .switch > div::before {
+    @apply absolute left-0 top-1/2 h-20 w-20 -translate-y-1/2 rounded-full bg-white transition content-[""];
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2),
+      0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.14);
+  }
+  .switch > input:checked + div {
+    @apply bg-rocket-blueLight/60;
+  }
+  .switch > input:focus + div {
+    box-shadow: 0 0 1px rgb(111 141 255 / 0.6);
+  }
+  .switch > input:checked + div::before {
+    @apply -translate-y-1/2 translate-x-12 bg-rocket-blue;
+  }
+  .switch > input:disabled + div {
+    @apply cursor-not-allowed;
+  }
+  .switch > input:disabled + div::before {
+    @apply bg-rocket-ghostDark;
+  }
+}
+
+@layer utilities {
+  .ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .absolute-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}

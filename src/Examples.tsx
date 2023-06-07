@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   Dropdown,
   Popover,
@@ -9,7 +9,6 @@ import {
   Select,
   Pagination,
 } from './components'
-import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import ICONS from './icons'
 import usePagination from './hooks/usePagination'
 import { DropdownItems } from './samples/DropdownItems'
@@ -34,11 +33,11 @@ interface ContentType {
 }
 
 export default function Examples() {
-  const [modalShow, setModalShow] = useState<boolean>(false)
-  const [modalShow2, setModalShow2] = useState<boolean>(false)
-  const [sidebarShow, setSidebarShow] = useState<boolean>(false)
-  const [selectValue, setSelectValue] = useState<string>('')
-  const [contents, setContents] = useState<ContentType[]>([])
+  const [modalShow, setModalShow] = useState<boolean>(false);
+  const [modalShow2, setModalShow2] = useState<boolean>(false);
+  const [sidebarShow, setSidebarShow] = useState<boolean>(false);
+  const [selectValue, setSelectValue] = useState<string>('');
+  const [contents, setContents] = useState<ContentType[]>([]);
   const {
     page,
     pageButtons,
@@ -49,15 +48,7 @@ export default function Examples() {
     setTotalCount,
     setPageSize,
     fn,
-  } = usePagination()
-
-  useEffect(() => {
-    setPageSize(5)
-  }, [])
-
-  useEffect(() => {
-    getPaginationSamples(page, pageSize)
-  }, [page, pageSize])
+  } = usePagination();
 
   const handleModalClose = () => {
     setModalShow(false)
@@ -71,23 +62,34 @@ export default function Examples() {
     setSidebarShow(false)
   }
 
-  const getPaginationSamples = async (page: number, pageSize: number) => {
-    const result = await axios.get('https://koreanjson.com/comments')
-    setTotalCount(result?.data?.length)
-    const paged = result?.data?.slice((page - 1) * pageSize, page * pageSize)
-    setContents(paged)
-  }
+  const getPaginationSamples = useCallback(
+    async (page: number, pageSize: number) => {
+      const result = await axios.get('https://koreanjson.com/comments');
+      setTotalCount(result?.data?.length);
+      const paged = result?.data?.slice((page - 1) * pageSize, page * pageSize);
+      setContents(paged);
+    },
+    [setTotalCount, setContents],
+  );
+
+  useEffect(() => {
+    setPageSize(5);
+  }, [setPageSize]);
+
+  useEffect(() => {
+    getPaginationSamples(page, pageSize).finally();
+  }, [page, pageSize, getPaginationSamples]);
 
   return (
     <Container>
       <Dropdown
         items={DropdownItems}
-        placement="bottom-start"
-        menuItemStyle="flex rounded-md items-center w-full p-2 text-sm cursor-pointer text-gray-900 hover:(bg-amber-500 text-white)"
+        placement='bottom-start'
+        menuItemStyle='flex w-full cursor-pointer items-center rounded-md p-8 text-sm text-gray-900 hover:bg-amber-500 hover:text-white'
       >
-        <div className="inline-flex items-center justify-center rounded-md bg-black/20 px-16 py-8 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75">
+        <div className='inline-flex items-center justify-center rounded-md bg-black/20 px-16 py-8 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75'>
           <span>hi</span>
-          <ChevronDownIcon className="ml-8 text-sm" />
+          <ICONS.ChevronDown className='ml-8 text-sm' />
         </div>
       </Dropdown>
 
@@ -195,11 +197,7 @@ export default function Examples() {
           }}
           value={selectValue}
           showArrow
-          arrow={
-            <div className="h-20 w-20">
-              <ICONS.Logo />
-            </div>
-          }
+          arrow={<ICONS.ChevronDown className="h-14 w-14"/>}
           placeholder="지역번호를 입력하세요"
         />
       </div>
