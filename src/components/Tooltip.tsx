@@ -1,46 +1,50 @@
-import tw, { TwStyle } from 'twin.macro'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import type { ReactNode, ElementType } from 'react'
+import { useCallback, useRef, useState } from 'react'
+
 import { Popover as HeadlessPopover } from '@headlessui/react'
 import type * as PopperJS from '@popperjs/core'
 import { usePopper } from 'react-popper'
+
 import Transition from './Transition'
 
+import { cls } from '../utils/common'
+
 interface TransitionType {
-  enter?: TwStyle
-  enterFrom?: TwStyle
-  enterTo?: TwStyle
-  leave?: TwStyle
-  leaveFrom?: TwStyle
-  leaveTo?: TwStyle
+  enter?: string
+  enterFrom?: string
+  enterTo?: string
+  leave?: string
+  leaveFrom?: string
+  leaveTo?: string
 }
 
 interface PopoverProps {
-  content: string
+  content: ReactNode
   placement?: PopperJS.Placement
   offset?: number[]
   trigger?: 'hover' | 'click'
-  style?: TwStyle
+  style?: string
   arrow?: boolean
   panelProps?: {
-    as?: React.ElementType
+    as?: ElementType
     focus?: boolean
     static?: boolean
     unmount?: undefined
   }
   transitionProps?: TransitionType
-  children: React.ReactNode
+  children: ReactNode
 }
 
 const transitionPropsDefault = {
-  enter: tw`transition ease-out duration-200`,
-  enterFrom: tw`opacity-0`,
-  enterTo: tw`opacity-100`,
-  leave: tw`transition ease-in duration-150`,
-  leaveFrom: tw`opacity-100`,
-  leaveTo: tw`opacity-0`,
+  enter: 'transition ease-out duration-200',
+  enterFrom: 'opacity-0',
+  enterTo: 'opacity-100',
+  leave: 'transition ease-in duration-150',
+  leaveFrom: 'opacity-100',
+  leaveTo: 'opacity-0',
 }
 
-export default function Tooltip({
+export const Tooltip = ({
   content,
   placement = 'bottom-start',
   offset,
@@ -50,7 +54,7 @@ export default function Tooltip({
   panelProps,
   transitionProps = transitionPropsDefault,
   children,
-}: PopoverProps) {
+}: PopoverProps) => {
   const [isShow, setIsShow] = useState<boolean>(false)
   const [referenceElement, setReferenceElement] =
     useState<HTMLButtonElement | null>()
@@ -67,8 +71,8 @@ export default function Tooltip({
     ],
   })
 
-  let enterTimeout = useRef<any>()
-  let leaveTimeout = useRef<any>()
+  const enterTimeout = useRef<any>()
+  const leaveTimeout = useRef<any>()
 
   const enterDelay = 150
   const leaveDelay = 150
@@ -77,20 +81,20 @@ export default function Tooltip({
     if (trigger === 'click') return
     leaveTimeout.current && clearTimeout(leaveTimeout.current)
     enterTimeout.current = setTimeout(() => setIsShow(true), enterDelay)
-  }, [enterDelay])
+  }, [trigger, enterDelay])
   const handleMouseLeave = useCallback(() => {
     if (trigger === 'click') return
     enterTimeout.current && clearTimeout(enterTimeout.current)
     leaveTimeout.current = setTimeout(() => setIsShow(false), leaveDelay)
-  }, [leaveDelay])
+  }, [trigger, leaveDelay])
 
   if (!content) return null
 
-  const defaultTooltipStyle = tw`py-2 px-4 [border-radius: 4px] bg-gray-900 text-white`
+  const defaultTooltipStyle = 'py-8 px-16 rounded bg-gray-900 text-white'
 
   return (
     <HeadlessPopover
-      tw="relative w-fit"
+      className="relative w-fit"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -105,26 +109,28 @@ export default function Tooltip({
           <HeadlessPopover.Panel
             ref={setPopperElement}
             style={styles.popper}
-            css={[
-              tw`absolute z-10`,
-              tw`data-[popper-placement^=top]:[& > div]:-bottom-1`,
-              tw`data-[popper-placement^=bottom]:[& > div]:-top-1`,
-              tw`data-[popper-placement^=left]:[& > div]:-right-1`,
-              tw`data-[popper-placement^=right]:[& > div]:-left-1`,
+            className={cls(
+              'absolute z-10',
+              '[&_div]:data-[popper-placement^=top]:-bottom-4',
+              '[&_div]:data-[popper-placement^=bottom]:-top-4',
+              '[&_div]:data-[popper-placement^=left]:-right-4',
+              '[&_div]:data-[popper-placement^=right]:-left-4',
               style ?? defaultTooltipStyle,
-            ]}
+            )}
             {...attributes.popper}
             {...panelProps}
           >
             {content}
-            <div
-              ref={setArrowElement}
-              style={styles.arrow}
-              css={[
-                tw`absolute w-3 h-3 bg-inherit [z-index: -1] [visibility: hidden]`,
-                tw`before:(content-[''] absolute w-2 h-2 bg-inherit visible rotate-45)`,
-              ]}
-            />
+            {arrow && (
+              <div
+                ref={setArrowElement}
+                style={styles.arrow}
+                className={cls(
+                  'bg-inherit -z-1 invisible absolute h-12 w-12',
+                  "before:bg-inherit before:visible before:absolute before:h-8 before:w-8 before:rotate-45 before:content-['']",
+                )}
+              />
+            )}
           </HeadlessPopover.Panel>
         </Transition>
       </>
