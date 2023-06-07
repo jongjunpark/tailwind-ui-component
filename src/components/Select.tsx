@@ -1,23 +1,27 @@
-import tw, { TwStyle } from 'twin.macro'
-import React, { useEffect, useRef, useState } from 'react'
+import type { ReactNode, ElementType, RefObject } from 'react'
+import { useEffect, useRef, useState } from 'react'
+
 import { Popover as HeadlessPopover } from '@headlessui/react'
 import { usePopper } from 'react-popper'
+
 import Transition from './Transition'
-import { ChevronDownIcon } from '@heroicons/react/20/solid'
+
+import ICONS from '../icons'
+import { cls } from '../utils/common'
 
 interface TransitionType {
-  enter?: TwStyle
-  enterFrom?: TwStyle
-  enterTo?: TwStyle
-  leave?: TwStyle
-  leaveFrom?: TwStyle
-  leaveTo?: TwStyle
+  enter?: string
+  enterFrom?: string
+  enterTo?: string
+  leave?: string
+  leaveFrom?: string
+  leaveTo?: string
 }
 
 interface SelectItemType {
   value: string
-  name?: string | React.ReactNode
-  selectedName?: string | React.ReactNode
+  name?: string | ReactNode
+  selectedName?: string | ReactNode
 }
 
 type PlacementType =
@@ -33,7 +37,7 @@ interface SelectProps {
   placement?: PlacementType
   offset?: number[]
   panelProps?: {
-    as?: React.ElementType
+    as?: ElementType
     focus?: boolean
     static?: boolean
     unmount?: undefined
@@ -44,27 +48,27 @@ interface SelectProps {
   initialValue?: string
   onChange?: (
     value: string,
-    name?: string | React.ReactNode,
-    selectedName?: string | React.ReactNode,
+    name?: string | ReactNode,
+    selectedName?: string | ReactNode,
   ) => void
   placeholder?: string
   showArrow?: boolean
-  arrow?: React.ReactNode
-  inputStyle?: TwStyle
-  inputItemStyle?: TwStyle
+  arrow?: ReactNode
+  inputStyle?: string
+  inputItemStyle?: string
   showSearch?: boolean
 }
 
 const transitionPropsDefault = {
-  enter: tw`transition ease-out duration-200`,
-  enterFrom: tw`opacity-0 -translate-y-1`,
-  enterTo: tw`opacity-100 translate-y-0`,
-  leave: tw`transition ease-in duration-150`,
-  leaveFrom: tw`opacity-100 translate-y-0`,
-  leaveTo: tw`opacity-0 -translate-y-1`,
+  enter: 'transition ease-out duration-200',
+  enterFrom: 'opacity-0 -translate-y-4',
+  enterTo: 'opacity-100 translate-y-0',
+  leave: 'transition ease-in duration-150',
+  leaveFrom: 'opacity-100 translate-y-0',
+  leaveTo: 'opacity-0 -translate-y-4',
 }
 
-export default function Select({
+export const Select = ({
   items,
   placement = 'bottom-start',
   offset,
@@ -80,10 +84,9 @@ export default function Select({
   inputStyle,
   inputItemStyle,
   showSearch,
-}: SelectProps) {
+}: SelectProps) => {
   const [selected, setSelected] = useState<string | undefined>(initialValue)
   const [query, setQuery] = useState('')
-  const [isFocus, setIsFocus] = useState(false)
   const [referenceElement, setReferenceElement] =
     useState<HTMLButtonElement | null>()
   const [popperElement, setPopperElement] = useState<HTMLDivElement | null>()
@@ -115,8 +118,8 @@ export default function Select({
       : items.filter(item =>
           item.value
             .toLowerCase()
-            .replace(/\s+/g, '')
-            .includes(query.toLowerCase().replace(/\s+/g, '')),
+            .replaceAll(/\s+/g, '')
+            .includes(query.toLowerCase().replaceAll(/\s+/g, '')),
         )
 
   const handleClickItem = (item: SelectItemType, close: () => void) => {
@@ -133,8 +136,7 @@ export default function Select({
     const selectedItemIndex = items.findIndex(item => item.value === selected)
 
     return (
-      items?.[selectedItemIndex]?.selectedName ??
-      items?.[selectedItemIndex]?.value
+      items[selectedItemIndex]?.selectedName ?? items[selectedItemIndex]?.value
     )
   }
 
@@ -149,22 +151,22 @@ export default function Select({
   }
 
   return (
-    <HeadlessPopover tw="relative w-full h-full">
+    <HeadlessPopover className="relative h-full w-full">
       <>
         <HeadlessPopover.Button
           ref={setReferenceElement}
-          tw="w-full h-full"
+          className="h-full w-full focus:outline-none"
           disabled={disabled}
         >
           <div
-            css={[
-              tw`relative w-full h-full p-4 flex items-center gap-1 cursor-pointer overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm`,
-              disabled && tw`cursor-not-allowed`,
-              showArrow && tw`pr-10`,
-              inputStyle,
-            ]}
+            className={cls(
+              'input relative flex cursor-pointer items-center overflow-hidden',
+              disabled ? '!cursor-not-allowed' : '',
+              showArrow ? '!pr-32' : '',
+              inputStyle ?? '',
+            )}
           >
-            {/* 
+            {/*
               TODO: value만 표기되는 것 추후에 수정 (필요시)
             */}
             {showSearch ? (
@@ -174,20 +176,20 @@ export default function Select({
                 onChange={e => setQuery(e.target.value)}
                 ref={searchInputRef}
                 placeholder={placeholder}
-                css={[tw`outline-0 w-full`]}
+                className="w-full outline-0"
               />
             ) : (
-              <div tw="text-ellipsis overflow-hidden whitespace-nowrap">
+              <div className="overflow-hidden text-ellipsis whitespace-nowrap">
                 {getItemValue()}
               </div>
             )}
             {showArrow && (
-              <div tw="absolute top-1/2 right-3 -translate-y-1/2">
-                {arrow ?? <ChevronDownIcon tw="w-5 h-5" />}
+              <div className="absolute right-8 top-1/2 -translate-y-1/2">
+                {arrow ?? <ICONS.ChevronDown />}
               </div>
             )}
             {placeholder && !showSearch && !selected && (
-              <div tw="w-full text-ellipsis overflow-hidden whitespace-nowrap text-gray-500">
+              <div className="ellipsis w-full text-start text-rocket-hazeDark">
                 {placeholder}
               </div>
             )}
@@ -197,7 +199,7 @@ export default function Select({
           <HeadlessPopover.Panel
             ref={setPopperElement}
             style={styles.popper}
-            css={[tw`absolute z-10`]}
+            className="absolute z-10 min-w-full"
             {...attributes.popper}
             {...panelProps}
           >
@@ -222,7 +224,7 @@ export default function Select({
   )
 }
 
-function SelectItems({
+const SelectItems = ({
   items,
   inputItemStyle,
   selected,
@@ -232,32 +234,32 @@ function SelectItems({
   selectedRef,
 }: {
   items: SelectItemType[]
-  inputItemStyle?: TwStyle
+  inputItemStyle?: string
   selected: string | undefined
   close: () => void
   handleClickItem: (item: SelectItemType, close: () => void) => void
-  scrollBox?: React.RefObject<HTMLDivElement>
-  selectedRef?: React.RefObject<HTMLDivElement>
-}) {
+  scrollBox?: RefObject<HTMLDivElement>
+  selectedRef?: RefObject<HTMLDivElement>
+}) => {
   return (
     <>
-      {items?.length > 0 ? (
+      {items.length > 0 ? (
         <div
-          tw="bg-white p-1 rounded max-h-64 overflow-y-auto [box-shadow: 0 6px 16px 0 rgb(0 0 0 / 8%), 0 3px 6px -4px rgb(0 0 0 / 12%), 0 9px 28px 8px rgb(0 0 0 / 5%)]"
+          className="max-h-256 overflow-y-auto rounded bg-white p-4 shadow-lg"
           ref={scrollBox}
         >
-          {items?.map(item => (
+          {items.map(item => (
             <div
-              key={item?.value}
-              css={[
-                tw`cursor-pointer px-4 py-2 text-sm transition hover:(bg-gray-100)`,
-                inputItemStyle,
-                selected === item?.value && tw`bg-gray-100`,
-              ]}
+              key={item.value}
+              className={cls(
+                'cursor-pointer whitespace-nowrap px-16 py-8 text-sm transition hover:bg-rocket-ghostDark',
+                selected === item.value ? 'bg-rocket-ghost font-bold' : '',
+                inputItemStyle ?? '',
+              )}
               onClick={() => handleClickItem(item, close)}
-              ref={selected === item?.value ? selectedRef : null}
+              ref={selected === item.value ? selectedRef : null}
             >
-              {item?.name ?? item?.value}
+              {item?.name ?? item.value}
             </div>
           ))}
         </div>
