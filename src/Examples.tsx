@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import tw, { TwStyle } from 'twin.macro'
 import {
   Dropdown,
   Popover,
@@ -18,6 +17,8 @@ import PopoverContent from './samples/PopoverContent'
 import SidebarContent from './samples/SidebarContent'
 import { SelectItems } from './samples/SelectItems'
 import axios from 'axios'
+
+import { cls } from './utils/common'
 
 interface ContentType {
   id: number
@@ -47,9 +48,7 @@ export default function Examples() {
     currentRatio,
     setTotalCount,
     setPageSize,
-    changePage,
-    prevPage,
-    nextPage,
+    fn,
   } = usePagination()
 
   useEffect(() => {
@@ -84,11 +83,11 @@ export default function Examples() {
       <Dropdown
         items={DropdownItems}
         placement="bottom-start"
-        menuItemStyle={tw`flex rounded-md items-center w-full p-2 text-sm cursor-pointer text-gray-900 hover:(bg-amber-500 text-white)`}
+        menuItemStyle="flex rounded-md items-center w-full p-2 text-sm cursor-pointer text-gray-900 hover:(bg-amber-500 text-white)"
       >
-        <div tw="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:(ring-2 ring-white ring-opacity-75)">
+        <div className="inline-flex items-center justify-center rounded-md bg-black/20 px-16 py-8 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75">
           <span>hi</span>
-          <ChevronDownIcon tw="w-5 h-5 ml-2" />
+          <ChevronDownIcon className="ml-8 text-sm" />
         </div>
       </Dropdown>
 
@@ -97,17 +96,21 @@ export default function Examples() {
         content={<PopoverContent />}
         offset={[8, 12]}
       >
-        <button tw="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:(ring-2 ring-white ring-opacity-75)">
+        <div className="flex w-fit justify-center rounded-md bg-black/20 px-16 py-8 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75">
           <span>Open Popover</span>
-        </button>
+        </div>
       </Popover>
       <Tooltip
         content="tooltip!"
-        trigger="hover"
+        trigger="click"
         placement="bottom"
         offset={[0, 12]}
+        arrow
       >
-        <button tw="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:(ring-2 ring-white ring-opacity-75)">
+        <button
+          type="button"
+          className="inline-flex justify-center rounded-md bg-black/20 px-16 py-8 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
+        >
           <span>Tooltip</span>
         </button>
       </Tooltip>
@@ -115,14 +118,14 @@ export default function Examples() {
       <div>
         <button
           type="button"
-          tw="px-4 py-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:(ring-2 ring-white ring-opacity-75)"
+          className="rounded-md bg-black/20 px-16 py-8 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
           onClick={() => setModalShow(true)}
         >
           Modal On
         </button>
         <button
           type="button"
-          tw="px-4 py-2 ml-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:(ring-2 ring-white ring-opacity-75)"
+          className="ml-8 rounded-md bg-black/20 px-16 py-8 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
           onClick={() => setModalShow2(true)}
         >
           Full Modal On
@@ -134,11 +137,12 @@ export default function Examples() {
           width="400px"
           centered
         >
-          <div tw="flex flex-col gap-2">
+          <div className="flex flex-col gap-8">
             <div>test1</div>
             <div>test2</div>
             <button
-              tw="border border-gray-400 rounded-md cursor-pointer mt-1.5 py-1 hover:(border-blue-500 text-blue-500)"
+              type="button"
+              className="mt-6 cursor-pointer rounded-md border border-gray-400 py-4 hover:border-blue-500 hover:text-blue-500"
               onClick={() => setModalShow(false)}
             >
               close
@@ -152,11 +156,12 @@ export default function Examples() {
           close
           fullScreens={['mobile', 'desktop']}
         >
-          <div tw="flex flex-col gap-2">
+          <div className="flex flex-col gap-8">
             <div>test1</div>
             <div>test2</div>
             <button
-              tw="border border-gray-400 rounded-md cursor-pointer mt-1.5 py-1 hover:(border-blue-500 text-blue-500)"
+              type="button"
+              className="mt-6 cursor-pointer rounded-md border border-gray-400 py-4 hover:border-blue-500 hover:text-blue-500"
               onClick={() => setModalShow2(false)}
             >
               close
@@ -168,7 +173,7 @@ export default function Examples() {
       <div>
         <button
           type="button"
-          tw="px-4 py-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:(ring-2 ring-white ring-opacity-75)"
+          className="rounded-md bg-black/20 px-16 py-8 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
           onClick={() => setSidebarShow(true)}
         >
           Sidebar On
@@ -182,16 +187,16 @@ export default function Examples() {
         </Sidebar>
       </div>
 
-      <div tw="w-48 h-10">
+      <div className="h-40 w-192">
         <Select
           items={SelectItems}
-          onChange={value => {
+          onChange={(value: string) => {
             setSelectValue(value)
           }}
           value={selectValue}
           showArrow
           arrow={
-            <div tw="w-5 h-5">
+            <div className="h-20 w-20">
               <ICONS.Logo />
             </div>
           }
@@ -225,12 +230,15 @@ export default function Examples() {
         ]}
       />
 
-      <div tw="flex flex-col gap-4">
+      <div className="flex flex-col gap-16">
         {contents?.map(content => (
-          <div tw="p-4 border border-gray-600 rounded-lg">
-            <div tw="mb-1">
-              <span tw="font-bold">{content.User?.username}</span>
-              <span tw="text-gray-500 text-sm ml-2">
+          <div
+            className="rounded-lg border border-gray-600 p-16"
+            key={content.id}
+          >
+            <div className="mb-4">
+              <span className="font-bold">{content.User?.username}</span>
+              <span className="ml-8 text-sm text-gray-500">
                 {new Date(content.updatedAt).toLocaleString()}
               </span>
             </div>
@@ -243,60 +251,66 @@ export default function Examples() {
           maxPage={maxPage}
           maxRatio={maxRatio}
           currentRatio={currentRatio}
-          changePage={changePage}
-          prevPage={prevPage}
-          nextPage={nextPage}
+          changePage={fn.changePage}
+          prevPage={fn.prevPage}
+          nextPage={fn.nextPage}
         />
       </div>
     </Container>
   )
 }
 
-/**
- * Usage example ends here =====================================================
- */
-
-const exampleData: [string, TwStyle, string][] = [
+const exampleData: [string, string, string][] = [
   [
     'Dropdown',
-    tw`to-indigo-500 from-purple-500`,
+    'to-indigo-500 from-purple-500',
     '링크 목록 등을 표시하기 위해 사용 됨, 주로 네비게이션과 같은 메뉴 표기 용도로 사용되고 카드와 같은 요소에는 popover를 사용',
   ],
   [
     'Popover',
-    tw`from-sky-400 to-indigo-500`,
+    'from-sky-400 to-indigo-500',
     '추가 정보 또는 작업을 제공하기 위한 팝업 메뉴, 단순 메뉴가 아닌 복잡한 카드형태를 구현하는데에 용이함',
   ],
   [
     'Tooltip',
-    tw`from-orange-600 to-yellow-600`,
+    'from-orange-600 to-yellow-600',
     '마우스 입력(hover/click)에 표시되며 단순한 텍스트 표기에 사용됨, 간단한 설명을 제공하는데에 사용',
   ],
   [
     'Modal',
-    tw`from-emerald-600 to-teal-900`,
+    'from-emerald-600 to-teal-900',
     '새 페이지로 이동하지 않고 현재 페이지 위에 새로운 박스를 팝업형식으로 띄우는데에 사용',
   ],
   [
     'Sidebar',
-    tw`from-cyan-600 to-blue-600`,
+    'from-cyan-600 to-blue-600',
     '측면에 메뉴를 숨겨두고 사용하는데에 사용',
   ],
   [
     'Select (Autocomplete)',
-    tw`from-pink-500 to-rose-500`,
+    'from-pink-500 to-rose-500',
     'Select 태그의 커스텀 버전',
   ],
   [
     'Breadcrumb',
-    tw`from-white to-white`,
+    'from-white to-white',
     '시스템의 계층을 알려주는데에 사용 혹은 현재 페이지의 위치를 알려줌',
   ],
   [
     'Pagination',
-    tw`from-white to-white`,
+    'from-white to-white',
     '컨텐츠를 여러 페이지로 분리하여 탐색 및 이동할 수 있도록 도와주는데에 사용',
   ],
+  // [
+  //   'Disclosure',
+  //   'from-white to-white',
+  //   '일부 컨텐츠를 숨겨두었다가 펼쳐서 표현하는데에 사용',
+  // ],
+  // [
+  //   'Switch',
+  //   'from-white to-white',
+  //   '스위치 형식으로 ON / OFF를 제어할때에 사용',
+  // ],
 ]
 
 type ExampleProps = {
@@ -305,30 +319,27 @@ type ExampleProps = {
   index: number
 }
 
-function Example({ className, children, index }: ExampleProps) {
+function Example({ children, index }: ExampleProps) {
   const [heading, gradientStyles, description] = exampleData[index] || []
   return (
-    <div css={[tw`space-y-4`, gradientStyles]}>
-      <h2 tw="font-extrabold text-3xl">{heading}</h2>
-      <h3 tw="text-xl font-bold">When To use</h3>
-      <p tw="!mb-6">{description}</p>
-      <div
-        tw="p-10 relative rounded-xl bg-gradient-to-r shadow-lg text-black"
-        {...{ className }}
-      >
+    <div className={cls('space-y-16', gradientStyles)}>
+      <h2 className="text-3xl font-extrabold text-white">{heading}</h2>
+      <h3 className="!mt-16 text-xl font-bold text-white">When To use</h3>
+      <p className="!mt-12 text-white">{description}</p>
+      <div className="relative !mt-20 rounded-xl bg-gradient-to-r p-40 text-black shadow-lg">
         {children}
       </div>
     </div>
   )
 }
 
-function Container({ children }: { children: React.ReactNode[] }) {
+function Container({ children }: { children?: React.ReactNode[] }) {
   if (!children) return null
 
   return (
-    <div tw="flex flex-col items-center py-36">
-      <div tw="w-full max-w-[700px] space-y-20">
-        {children.map((item, index) => (
+    <div className="flex flex-col items-center bg-[#13264E] py-144">
+      <div className="w-full max-w-[700px] space-y-80">
+        {children?.map((item, index) => (
           <Example key={index} index={index}>
             {item}
           </Example>
