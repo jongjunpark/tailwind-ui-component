@@ -1,16 +1,20 @@
-import tw, { TwStyle } from 'twin.macro'
-import React, { Fragment, useState } from 'react'
+import type { ElementType, ReactNode } from 'react'
+import { Fragment } from 'react'
+
 import { Dialog } from '@headlessui/react'
+
 import Transition from './Transition'
+
 import ICONS from '../icons'
+import { cls } from '../utils/common'
 
 interface TransitionType {
-  enter?: TwStyle
-  enterFrom?: TwStyle
-  enterTo?: TwStyle
-  leave?: TwStyle
-  leaveFrom?: TwStyle
-  leaveTo?: TwStyle
+  enter?: string
+  enterFrom?: string
+  enterTo?: string
+  leave?: string
+  leaveFrom?: string
+  leaveTo?: string
 }
 
 interface PositionType {
@@ -21,12 +25,12 @@ interface PositionType {
 type ScreenType = 'mobile' | 'tablet' | 'laptop' | 'desktop' | 'all'
 
 interface ModalProps {
-  children: React.ReactNode
+  children: ReactNode
   title?: string
-  titleStyle?: TwStyle
-  titleProps?: { as?: React.ElementType }
+  titleStyle?: string
+  titleProps?: { as?: ElementType }
   transitionProps?: TransitionType
-  contentStyle?: TwStyle
+  contentStyle?: string
   position?: PositionType
   centered?: boolean
   width?: string
@@ -37,15 +41,15 @@ interface ModalProps {
 }
 
 const transitionPropsDefault = {
-  enter: tw`ease-out duration-300`,
-  enterFrom: tw`opacity-0`,
-  enterTo: tw`opacity-100`,
-  leave: tw`ease-in duration-200`,
-  leaveFrom: tw`opacity-100`,
-  leaveTo: tw`opacity-0`,
+  enter: 'ease-out duration-300',
+  enterFrom: 'opacity-0',
+  enterTo: 'opacity-100',
+  leave: 'ease-in duration-200',
+  leaveFrom: 'opacity-100',
+  leaveTo: 'opacity-0',
 }
 
-export default function Modal({
+const Modal = ({
   children,
   title,
   titleStyle,
@@ -59,30 +63,28 @@ export default function Modal({
   close = false,
   fullScreens,
   onClose,
-}: ModalProps) {
+}: ModalProps) => {
   const positionStyle = () => {
     if (position) {
-      return tw`absolute left-1/2 -translate-x-1/2`
+      return 'absolute left-1/2 -translate-x-1/2'
     }
     if (centered) {
-      return tw`absolute-center`
+      return 'absolute-center'
     }
-    return tw`absolute left-1/2 -translate-x-1/2 top-1/4`
+    return 'absolute left-1/2 -translate-x-1/2 top-1/4'
   }
 
-  const fullScreenStyle = (): TwStyle[] => {
-    const commonoStyle =
-      'rounded-none translate-x-0 translate-y-0 top-0 left-0 bottom-0 right-0'
+  const fullScreenStyle = (): string[] => {
     const screenStyle = fullScreens?.map(screen => {
       if (screen === 'mobile')
-        return tw`only-mobile:(max-w-full h-full ${commonoStyle})`
+        return `only-mobile:max-w-full only-mobile:h-full only-mobile:rounded-none only-mobile:translate-x-0 only-mobile:translate-y-0 only-mobile:!top-0 only-mobile:!left-0 only-mobile:!bottom-0 only-mobile:!right-0`
       if (screen === 'tablet')
-        return tw`only-tablet:(max-w-full h-full ${commonoStyle})`
+        return `only-tablet:max-w-full only-tablet:h-full only-tablet:rounded-none only-tablet:translate-x-0 only-tablet:translate-y-0 only-tablet:!top-0 only-tablet:!left-0 only-tablet:!bottom-0 only-tablet:!right-0`
       if (screen === 'laptop')
-        return tw`only-laptop:(max-w-full h-full ${commonoStyle})`
+        return `only-laptop:max-w-full only-laptop:h-full only-laptop:rounded-none only-laptop:translate-x-0 only-laptop:translate-y-0 only-laptop:!top-0 only-laptop:!left-0 only-laptop:!bottom-0 only-laptop:!right-0`
       if (screen === 'desktop')
-        return tw`only-desktop:(max-w-full h-full ${commonoStyle})`
-      return tw`max-w-full h-full ${commonoStyle}`
+        return `only-desktop:max-w-full only-desktop:h-full only-desktop:rounded-none only-desktop:translate-x-0 only-desktop:translate-y-0 only-desktop:!top-0 only-desktop:!left-0 only-desktop:!bottom-0 only-desktop:!right-0`
+      return `max-w-full h-full rounded-none !translate-x-0 !translate-y-0 !top-0 !left-0 !bottom-0 !right-0`
     })
 
     if (screenStyle && screenStyle?.length > 0) {
@@ -92,79 +94,73 @@ export default function Modal({
   }
 
   return (
-    <Fragment>
-      <Transition appear show={open} as={Fragment}>
-        <Dialog as="div" tw="relative z-10" onClose={onClose}>
-          <Transition.Child as={Fragment} {...transitionProps}>
-            <Dialog.Overlay tw="fixed inset-0 bg-black bg-opacity-25" />
-          </Transition.Child>
+    <Transition appear show={open} as={Fragment}>
+      <Dialog as="div" className="relative !z-modal" onClose={onClose}>
+        <Transition.Child as={Fragment} {...transitionProps}>
+          <Dialog.Overlay className="fixed inset-0 bg-black/25" />
+        </Transition.Child>
 
-          <div tw="fixed inset-0 overflow-y-auto">
-            <Transition.Child as={Fragment} {...transitionProps}>
-              <div tw="w-full h-full">
-                <Dialog.Panel
-                  css={[
-                    tw`w-full transform overflow-hidden rounded bg-white text-left align-middle shadow-xl transition-all`,
-                    contentStyle,
-                    width
-                      ? {
-                          maxWidth: width,
-                        }
-                      : tw`max-w-md`,
-                    positionStyle(),
-                    {
-                      ...position,
-                    },
-                    ...fullScreenStyle(),
-                  ]}
-                >
-                  {close && (
-                    <div
-                      tw="absolute top-1 right-2.5 w-8 h-8 cursor-pointer flex justify-center items-center"
-                      onClick={onClose}
-                    >
-                      <div tw="w-6 h-6 [& path]:stroke-black">
-                        <ICONS.Close />
-                      </div>
-                    </div>
-                  )}
-                  {title && (
-                    <Header
-                      title={title}
-                      titleStyle={titleStyle}
-                      titleProps={titleProps}
-                    ></Header>
-                  )}
-                  <div tw="text-black py-2 px-4">{children}</div>
-                </Dialog.Panel>
-              </div>
-            </Transition.Child>
-          </div>
-        </Dialog>
-      </Transition>
-    </Fragment>
+        <div className="fixed inset-0 overflow-y-auto">
+          <Transition.Child as={Fragment} {...transitionProps}>
+            <div className="h-full w-full">
+              <Dialog.Panel
+                className={cls(
+                  'w-[calc(100%_-_32px)] max-w-[400px] rounded bg-white text-left align-middle shadow-xl transition-all',
+                  contentStyle ?? '',
+                  positionStyle(),
+                  ...fullScreenStyle(),
+                )}
+                style={{
+                  maxWidth: width,
+                  ...position,
+                }}
+              >
+                {close && (
+                  <div
+                    className="absolute right-12 top-12 flex h-32 w-32 cursor-pointer items-center justify-center"
+                    onClick={onClose}
+                  >
+                    <ICONS.Close1 className="text-2xl" />
+                  </div>
+                )}
+                {title && (
+                  <Header
+                    title={title}
+                    titleStyle={titleStyle}
+                    titleProps={titleProps}
+                  />
+                )}
+                <div className="text-black">{children}</div>
+              </Dialog.Panel>
+            </div>
+          </Transition.Child>
+        </div>
+      </Dialog>
+    </Transition>
   )
 }
 
-function Header({
+const Header = ({
   title,
   titleStyle,
   titleProps,
 }: {
   title?: string
-  titleStyle?: TwStyle
-  titleProps?: { as?: React.ElementType }
-}) {
+  titleStyle?: string
+  titleProps?: { as?: ElementType }
+}) => {
   return (
     <Dialog.Title
       as="h3"
-      css={[
-        tw`text-lg font-medium leading-6 text-gray-900 border-b py-2 px-4`,
-        titleStyle,
-      ]}
+      className={cls(
+        'border-b border-rocket-haze px-24 py-16 font-bold',
+        titleStyle ?? '',
+      )}
       {...titleProps}
     >
       {title}
     </Dialog.Title>
   )
 }
+
+export default Modal
