@@ -1,6 +1,7 @@
 import type { Dispatch, SetStateAction } from 'react';
 
 import ICONS from '../icons';
+import SVGS from '../svgs';
 
 interface SidebarContentProps {
   setSidebarShow: Dispatch<SetStateAction<boolean>>;
@@ -19,10 +20,10 @@ const SidebarContent = ({ setSidebarShow }: SidebarContentProps) => {
     <nav className='h-full w-240 bg-white'>
       <div className='mb-24 flex items-center justify-between px-24 pt-16'>
         <div className='cursor-pointer' onClick={() => setSidebarShow(false)}>
-          {/* <ICONS.Close1 className='text-[32px]' /> */}
+          <ICONS.Close className='text-[32px]' />
         </div>
-        <div className='h-32 w-32'>
-          <ICONS.Logo />
+        <div className='h-32 w-32 flex-center'>
+          <SVGS.Google />
         </div>
       </div>
       <ul>

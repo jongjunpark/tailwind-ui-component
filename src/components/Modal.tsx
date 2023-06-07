@@ -105,7 +105,7 @@ const Modal = ({
             <div className="h-full w-full">
               <Dialog.Panel
                 className={cls(
-                  'w-[calc(100%_-_32px)] max-w-[400px] rounded bg-white text-left align-middle shadow-xl transition-all',
+                  'w-full max-w-[400px] rounded bg-white text-left align-middle shadow-xl transition-all',
                   contentStyle ?? '',
                   positionStyle(),
                   ...fullScreenStyle(),
@@ -120,7 +120,7 @@ const Modal = ({
                     className="absolute right-12 top-12 flex h-32 w-32 cursor-pointer items-center justify-center"
                     onClick={onClose}
                   >
-                    <ICONS.Close1 className="text-2xl" />
+                    <ICONS.Close className="text-2xl" />
                   </div>
                 )}
                 {title && (

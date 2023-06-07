@@ -68,7 +68,7 @@ const transitionPropsDefault = {
   leaveTo: 'opacity-0 -translate-y-4',
 }
 
-export const Select = ({
+const Select = ({
   items,
   placement = 'bottom-start',
   offset,
@@ -148,6 +148,7 @@ export const Select = ({
       scrollBox.current.scrollTop =
         selectedRef.current.offsetTop - scrollBox.current.offsetTop
     }
+    return null;
   }
 
   return (
@@ -205,7 +206,7 @@ export const Select = ({
           >
             {({ open, close }) => (
               <Fragment>
-                {/* {openHandle(open)} */}
+                {openHandle(open)}
                 <SelectItems
                   items={showSearch ? filteredItems : items}
                   inputItemStyle={inputItemStyle}
@@ -267,3 +268,5 @@ const SelectItems = ({
     </Fragment>
   )
 }
+
+export default Select

@@ -44,7 +44,7 @@ const transitionPropsDefault = {
   leaveTo: 'opacity-0',
 }
 
-export const Tooltip = ({
+const Tooltip = ({
   content,
   placement = 'bottom-start',
   offset,
@@ -137,3 +137,5 @@ export const Tooltip = ({
     </HeadlessPopover>
   )
 }
+
+export default Tooltip

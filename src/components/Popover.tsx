@@ -1,11 +1,5 @@
-import {
-  Dispatch,
-  SetStateAction,
-  ElementType,
-  ReactNode,
-  Fragment,
-} from 'react'
-import { useEffect, useRef, useState } from 'react'
+import type { Dispatch, SetStateAction, ElementType, ReactNode } from 'react'
+import { useEffect, useRef, useState, Fragment } from 'react'
 
 import { Popover as HeadlessPopover } from '@headlessui/react'
 import type * as PopperJS from '@popperjs/core'
@@ -51,7 +45,7 @@ const transitionPropsDefault = {
   leaveTo: 'opacity-0 translate-y-4',
 }
 
-export const Popover = ({
+const Popover = ({
   content,
   placement = 'bottom-start',
   offset,
@@ -135,3 +129,5 @@ export const Popover = ({
     </div>
   )
 }
+
+export default Popover

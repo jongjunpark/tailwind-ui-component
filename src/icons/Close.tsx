@@ -1,18 +1,16 @@
-export const Close = () => {
+export function Close({ ...props }) {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke-width="1.5"
-      stroke="currentColor"
-      className="w-6 h-6"
+      xmlns='http://www.w3.org/2000/svg'
+      viewBox='0 0 32 32'
+      width='1em'
+      height='1em'
+      fill='currentColor'
+      aria-hidden='true'
+      {...props}
     >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        d="M6 18L18 6M6 6l12 12"
-      />
+      <title>close</title>
+      <path d='M25.333 8.547l-1.88-1.88-7.453 7.453-7.453-7.453-1.88 1.88 7.453 7.453-7.453 7.453 1.88 1.88 7.453-7.453 7.453 7.453 1.88-1.88-7.453-7.453z'></path>
     </svg>
-  )
+  );
 }

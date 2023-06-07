@@ -1,4 +1,4 @@
-import ICONS from '../icons';
+import SVGS from '../svgs';
 
 export const DropdownItems = [
   [
@@ -6,7 +6,7 @@ export const DropdownItems = [
       label: 'Edit',
       icon: (
         <div className='mr-8 h-20 w-20'>
-          <ICONS.Edit />
+          <SVGS.Edit />
         </div>
       ),
       url: '/test',
@@ -15,7 +15,7 @@ export const DropdownItems = [
       label: 'Duplicate',
       icon: (
         <div className='mr-8 h-20 w-20'>
-          <ICONS.Duplicate />
+          <SVGS.Duplicate />
         </div>
       ),
     },
@@ -25,7 +25,7 @@ export const DropdownItems = [
       label: 'Archive',
       icon: (
         <div className='mr-8 h-20 w-20'>
-          <ICONS.Archive />
+          <SVGS.Archive />
         </div>
       ),
     },
@@ -33,7 +33,7 @@ export const DropdownItems = [
       label: 'Move',
       icon: (
         <div className='mr-8 h-20 w-20'>
-          <ICONS.Move />
+          <SVGS.Move />
         </div>
       ),
     },
@@ -43,7 +43,7 @@ export const DropdownItems = [
       label: 'Delete',
       icon: (
         <div className='mr-8 h-20 w-20'>
-          <ICONS.Delete />
+          <SVGS.Delete />
         </div>
       ),
     },

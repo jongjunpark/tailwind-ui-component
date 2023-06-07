@@ -1,11 +1,10 @@
-import { Archive } from './Archive'
+import { ArrLeft } from './ArrLeft'
+import { ArrRight } from './ArrRight'
+import { ChevronDown } from './ChevronDown'
 import { Close } from './Close'
-import { Delete } from './Delete'
-import { Duplicate } from './Duplicate'
-import { Edit } from './Edit'
-import { Move } from './Move'
-import { Logo } from './Logo'
+import { Next } from './Next'
+import { Prev } from './Prev'
 
-const ICONS = { Archive, Close, Delete, Duplicate, Edit, Move, Logo }
+const ICONS = { ArrLeft, ArrRight, ChevronDown, Close, Next, Prev }
 
 export default ICONS

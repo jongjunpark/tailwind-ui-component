@@ -33,7 +33,7 @@ const transitionPropsDefault = {
   leaveTo: 'opacity-0',
 }
 
-export const Sidebar = ({
+const Sidebar = ({
   children,
   transitionProps,
   placement = 'right',
@@ -121,3 +121,5 @@ export const Sidebar = ({
     </Transition>
   )
 }
+
+export default Sidebar

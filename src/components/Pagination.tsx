@@ -12,7 +12,7 @@ interface PaginationProps {
   nextPage: () => void
 }
 
-export const Pagination = ({
+const Pagination = ({
   page,
   pageButtons,
   maxPage,
@@ -78,3 +78,5 @@ export const Pagination = ({
     </div>
   )
 }
+
+export default Pagination
