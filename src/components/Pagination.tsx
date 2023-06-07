@@ -1,11 +1,5 @@
-import tw, { TwStyle } from 'twin.macro'
-import React from 'react'
-import {
-  ChevronDoubleLeftIcon,
-  ChevronDoubleRightIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-} from '@heroicons/react/20/solid'
+import ICONS from '../icons'
+import { cls } from '../utils/common'
 
 interface PaginationProps {
   page: number
@@ -18,7 +12,7 @@ interface PaginationProps {
   nextPage: () => void
 }
 
-export default function Pagination({
+export const Pagination = ({
   page,
   pageButtons,
   maxPage,
@@ -27,34 +21,38 @@ export default function Pagination({
   changePage,
   prevPage,
   nextPage,
-}: PaginationProps) {
+}: PaginationProps) => {
   return (
-    <div tw="flex justify-center items-center mt-10 -ml-5">
+    <div className="mx-auto mt-24 flex w-fit items-center justify-center rounded-lg bg-white">
       <button
-        disabled={currentRatio === 1 ? true : false}
+        type="button"
+        disabled={currentRatio === 1}
         onClick={() => changePage(1)}
-        tw="w-4 h-4 cursor-pointer disabled:(text-gray-300 cursor-default)"
+        className="flex h-40 w-40 cursor-pointer items-center justify-center hover:text-rocket-blue disabled:cursor-default disabled:text-rocket-haze"
       >
-        <ChevronDoubleLeftIcon />
+        <ICONS.Next className="text-2xl" />
       </button>
       <button
-        disabled={currentRatio === 1 ? true : false}
+        type="button"
+        disabled={currentRatio === 1}
         onClick={prevPage}
-        tw="w-4 h-4 cursor-pointer disabled:(text-gray-300 cursor-default)"
+        className="flex h-40 w-40 cursor-pointer items-center justify-center hover:text-rocket-blue disabled:cursor-default disabled:text-rocket-haze"
       >
-        <ChevronLeftIcon />
+        <ICONS.ArrLeft className="text-2xl" />
       </button>
-      <ul tw="flex gap-1 mx-2">
+      <ul className="flex">
         {pageButtons.map((btnPage, i) => (
           <li key={i}>
             <button
+              type="button"
               disabled={btnPage === page}
               onClick={() => changePage(btnPage)}
-              css={[
-                tw`px-1 min-w-[28px] h-7 rounded-md text-sm cursor-pointer bg-transparent text-black transition disabled:cursor-default hover:bg-gray-300`,
-                btnPage === page &&
-                  tw`bg-blue-900 text-white hover:bg-blue-900`,
-              ]}
+              className={cls(
+                'h-40 min-w-40 cursor-pointer px-4 text-sm text-black transition hover:text-rocket-blue disabled:cursor-default',
+                btnPage === page
+                  ? 'bg-blue-700 text-white hover:bg-rocket-blue'
+                  : '',
+              )}
             >
               {btnPage}
             </button>
@@ -62,18 +60,20 @@ export default function Pagination({
         ))}
       </ul>
       <button
-        disabled={maxRatio === currentRatio ? true : false}
+        type="button"
+        disabled={maxRatio === currentRatio}
         onClick={nextPage}
-        tw="w-4 h-4 cursor-pointer disabled:(text-gray-300 cursor-default)"
+        className="flex h-40 w-40 cursor-pointer items-center justify-center hover:text-rocket-blue disabled:cursor-default disabled:text-rocket-haze"
       >
-        <ChevronRightIcon />
+        <ICONS.ArrRight className="text-2xl" />
       </button>
       <button
-        disabled={maxRatio === currentRatio ? true : false}
+        type="button"
+        disabled={maxRatio === currentRatio}
         onClick={() => changePage(maxPage)}
-        tw="w-4 h-4 cursor-pointer disabled:(text-gray-300 cursor-default)"
+        className="flex h-40 w-40 cursor-pointer items-center justify-center hover:text-rocket-blue disabled:cursor-default disabled:text-rocket-haze"
       >
-        <ChevronDoubleRightIcon />
+        <ICONS.Prev className="text-2xl" />
       </button>
     </div>
   )
