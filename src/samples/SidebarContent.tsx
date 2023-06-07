@@ -1,35 +1,38 @@
-import ICONS from '../icons'
+import type { Dispatch, SetStateAction } from 'react';
+
+import ICONS from '../icons';
+
 interface SidebarContentProps {
-  setSidebarShow: React.Dispatch<React.SetStateAction<boolean>>
+  setSidebarShow: Dispatch<SetStateAction<boolean>>;
 }
 
 const SidebarContent = ({ setSidebarShow }: SidebarContentProps) => {
   const LinkItem = ({ url, content }: any) => {
     return (
-      <li tw="py-3 px-6 text-center cursor-pointer hover:(bg-gray-100)">
+      <li className='cursor-pointer px-24 py-12 text-center hover:bg-gray-100'>
         <a href={url}>{content}</a>
       </li>
-    )
-  }
+    );
+  };
 
   return (
-    <nav tw="bg-white w-60 h-full">
-      <div tw="flex justify-between items-center mb-6 pt-4 px-6">
-        <div tw="w-8 h-8 cursor-pointer" onClick={() => setSidebarShow(false)}>
-          <ICONS.Close />
+    <nav className='h-full w-240 bg-white'>
+      <div className='mb-24 flex items-center justify-between px-24 pt-16'>
+        <div className='cursor-pointer' onClick={() => setSidebarShow(false)}>
+          {/* <ICONS.Close1 className='text-[32px]' /> */}
         </div>
-        <div tw="w-8 h-8">
+        <div className='h-32 w-32'>
           <ICONS.Logo />
         </div>
       </div>
       <ul>
-        <LinkItem url="/" content="홈" />
-        <LinkItem url="/people" content="사람" />
-        <LinkItem url="/companies" content="기업" />
-        <LinkItem url="job" content="채용" />
+        <LinkItem url='/' content='홈' />
+        <LinkItem url='/people' content='사람' />
+        <LinkItem url='/companies' content='기업' />
+        <LinkItem url='job' content='채용' />
       </ul>
     </nav>
-  )
-}
+  );
+};
 
-export default SidebarContent
+export default SidebarContent;

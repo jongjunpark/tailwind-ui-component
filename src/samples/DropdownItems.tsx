@@ -1,31 +1,51 @@
-import ICONS from '../icons'
+import ICONS from '../icons';
 
 export const DropdownItems = [
   [
     {
       label: 'Edit',
-      icon: <ICONS.Edit tw="w-5 h-5 mr-2" />,
+      icon: (
+        <div className='mr-8 h-20 w-20'>
+          <ICONS.Edit />
+        </div>
+      ),
       url: '/test',
     },
     {
       label: 'Duplicate',
-      icon: <ICONS.Duplicate tw="w-5 h-5 mr-2" />,
+      icon: (
+        <div className='mr-8 h-20 w-20'>
+          <ICONS.Duplicate />
+        </div>
+      ),
     },
   ],
   [
     {
       label: 'Archive',
-      icon: <ICONS.Archive tw="w-5 h-5 mr-2" />,
+      icon: (
+        <div className='mr-8 h-20 w-20'>
+          <ICONS.Archive />
+        </div>
+      ),
     },
     {
       label: 'Move',
-      icon: <ICONS.Move tw="w-5 h-5 mr-2" />,
+      icon: (
+        <div className='mr-8 h-20 w-20'>
+          <ICONS.Move />
+        </div>
+      ),
     },
   ],
   [
     {
       label: 'Delete',
-      icon: <ICONS.Delete tw="w-5 h-5 mr-2" />,
+      icon: (
+        <div className='mr-8 h-20 w-20'>
+          <ICONS.Delete />
+        </div>
+      ),
     },
   ],
-]
+];
