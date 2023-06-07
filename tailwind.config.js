@@ -87,53 +87,6 @@ const config = {
         relaxed: '1.64',
         ...px0_100,
       },
-      colors: {
-        primary: '#4e61ff',
-        secondary: '#6f8dff',
-        tertiary: '#3b32ca',
-        danger: '#ff5165',
-        bgGray1: '#eff2f7',
-        bgGray2: '#eff3f6',
-        borderGray: '#d9dfeb',
-        // 로켓펀치 custom color
-        rocket: {
-          blue: '#4e61ff',
-          blueLight: '#6f8dff',
-          blueDark: '#3b32ca',
-          red: '#ff5165',
-          redLight: '#ff7686',
-          redDark: '#eb3e54',
-          yellow: '#ffe823',
-          yellowLight: '#f7e861',
-          yellowDark: '#f6d720',
-          green: '#00d2bb',
-          greenLight: '#6ae1cb',
-          greenDark: '#00c7aa',
-          skyblue: '#23b4fc',
-          skyblueLight: '#66ccff',
-          skyblueDark: '#1db0e2',
-          skyblueDarker: '#008bd0',
-          // mono tone
-          black: '#28323c',
-          grey: '#6e7980',
-          haze: '#d9dfeb',
-          hazeDark: '#bbc5d8',
-          ghost: '#f9f9fc',
-          ghostDark: '#eff2f7',
-          // additional
-          steelBlue: '#4078c0',
-          greenApple: '#7ddd13',
-          lavendar: '#d288f0',
-          rhino: '#3c4858',
-          midnight: '#273444',
-          gainsboro: '#dddddd',
-          pastelOrange: '#ff9053',
-          aliceBlue: '#e9f3ff',
-          // social
-          google: '#3a83f9',
-          facebook: '#2c53ab',
-        },
-      },
       screens: {
         '2xl': '1280px',
         '3xl': '1920px',
@@ -148,9 +101,6 @@ const config = {
         modal: '1000',
         loading: '1001',
         popover: '11',
-      },
-      backgroundImage: {
-        jibmusil_banner: 'url(../dev/public/jibmusil-banner-bg.jpg)',
       },
       keyframes: {
         pop: {
