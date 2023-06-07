@@ -1,6 +1,5 @@
 export { default as Breadcrumb } from './Breadcrumb'
 export { default as Dropdown } from './Dropdown'
-export { default as Icons } from './Icons'
 export { default as Modal } from './Modal'
 export { default as Pagination } from './Pagination'
 export { default as Popover } from './Popover'
