@@ -1,60 +1,65 @@
-import tw, { TwStyle } from 'twin.macro'
-import React, { Fragment, useState } from 'react'
+import type { ElementType, ReactNode } from 'react'
+import { Fragment, useState } from 'react'
+
 import { Popover as HeadlessPopover } from '@headlessui/react'
 import type * as PopperJS from '@popperjs/core'
 import { usePopper } from 'react-popper'
+
 import Transition from './Transition'
 
-interface DropdownItems {
+import { cls } from '../utils/common'
+
+interface DropdownItemProps {
   label: string
-  icon?: React.ReactNode
+  icon?: ReactNode
   url?: string
+  isBlank?: boolean
   onClick?: () => void
 }
 
 interface TransitionType {
-  enter?: TwStyle
-  enterFrom?: TwStyle
-  enterTo?: TwStyle
-  leave?: TwStyle
-  leaveFrom?: TwStyle
-  leaveTo?: TwStyle
+  enter?: string
+  enterFrom?: string
+  enterTo?: string
+  leave?: string
+  leaveFrom?: string
+  leaveTo?: string
 }
 
 interface MenuItemsProps {
-  as?: React.ElementType
+  as?: ElementType
   static?: boolean
   unmount?: undefined
 }
 
 interface MenuItemProps {
-  as?: React.ElementType
+  as?: ElementType
   disabled?: boolean
 }
 
 interface DropdownProps {
-  items: DropdownItems[][]
+  items: DropdownItemProps[][]
   placement?: PopperJS.Placement
   offset?: number[]
-  menuProps?: { as?: React.ElementType }
+  menuProps?: { as?: ElementType }
   menuItemsProps?: MenuItemsProps
-  menuItemsStyle?: TwStyle
+  menuItemsStyle?: string
   menuItemProps?: MenuItemProps
-  menuItemStyle?: TwStyle
+  menuItemStyle?: string
   transitionProps?: TransitionType
-  children: React.ReactNode
+  children: ReactNode
 }
 
 const transitionPropsDefault = {
-  enter: tw`transition ease-out duration-200`,
-  enterFrom: tw`opacity-0 translate-y-1`,
-  enterTo: tw`opacity-100 translate-y-0`,
-  leave: tw`transition ease-in duration-150`,
-  leaveFrom: tw`opacity-100 translate-y-0`,
-  leaveTo: tw`opacity-0 translate-y-1`,
+  enter: 'transition ease-out duration-200',
+  enterFrom: 'opacity-0 translate-y-1',
+  enterTo: 'opacity-100 translate-y-0',
+  leave: 'transition ease-in duration-150',
+  leaveFrom: 'opacity-100 translate-y-0',
+  leaveTo: 'opacity-0 translate-y-1',
 }
 
-export default function Dropdown({
+const Dropdown = ({
   items,
   placement = 'bottom-start',
   offset,
@@ -65,7 +70,7 @@ export default function Dropdown({
   menuItemStyle,
   children,
   transitionProps = transitionPropsDefault,
-}: DropdownProps) {
+}: DropdownProps) => {
   const [referenceElement, setReferenceElement] =
     useState<HTMLButtonElement | null>()
   const [popperElement, setPopperElement] = useState<HTMLDivElement | null>()
@@ -81,20 +86,30 @@ export default function Dropdown({
 
   if (items.length === 0) return null
 
-  const defaultMenuItemsStyle = tw`bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`
+  const defaultMenuItemsStyle =
+    'bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'
 
   return (
-    <HeadlessPopover tw="relative" {...menuProps}>
+    <HeadlessPopover className="relative" {...menuProps}>
       {({ open }) => (
         <>
-          <HeadlessPopover.Button ref={setReferenceElement}>
-            <div css={[open && tw`[& svg]:rotate-180`]}>{children}</div>
+          <HeadlessPopover.Button
+            ref={setReferenceElement}
+            className={cls(
+              'focus:outline-none',
+              open ? '[&_svg]:rotate-180' : '',
+            )}
+          >
+            {children}
           </HeadlessPopover.Button>
           <Transition {...transitionProps}>
             <HeadlessPopover.Panel
               ref={setPopperElement}
               style={styles.popper}
-              css={[tw`absolute z-10`, menuItemsStyle ?? defaultMenuItemsStyle]}
+              className={cls(
+                'absolute z-10',
+                menuItemsStyle ?? defaultMenuItemsStyle,
+              )}
               {...attributes.popper}
               {...menuItemsProps}
             >
@@ -116,17 +131,17 @@ export default function Dropdown({
   )
 }
 
-function ItemGroup({
+const ItemGroup = ({
   group,
   menuItemProps,
   menuItemStyle,
 }: {
-  group: DropdownItems[]
+  group: DropdownItemProps[]
   menuItemProps?: MenuItemProps
-  menuItemStyle?: TwStyle
-}) {
+  menuItemStyle?: string
+}) => {
   return (
-    <div tw="p-1">
+    <ul role="menu">
       {group.map((item, index) => (
         <Item
           {...item}
@@ -135,32 +150,43 @@ function ItemGroup({
           menuItemStyle={menuItemStyle}
         />
       ))}
-    </div>
+    </ul>
   )
 }
 
-function Item({
+const Item = ({
   label,
   icon,
   url,
+  isBlank,
   menuItemProps,
   menuItemStyle,
   ...rest
 }: {
   label: string
-  icon?: React.ReactNode
+  icon?: ReactNode
   url?: string
+  isBlank?: boolean
   menuItemProps?: MenuItemProps
-  menuItemStyle?: TwStyle
-}) {
-  const defaultMenuItemStyle = tw`flex rounded-md items-center w-full p-2 text-sm cursor-pointer text-gray-900 hover:(bg-violet-500 text-white)`
+  menuItemStyle?: string
+}) => {
+  const defaultMenuItemStyle =
+    'flex items-center w-full px-16 leading-36 text-sm cursor-pointer text-gray-900 whitespace-nowrap hover:bg-gray-100'
 
   return (
-    <div key={label} {...menuItemProps}>
-      <a href={url} css={[menuItemStyle ?? defaultMenuItemStyle]} {...rest}>
+    <li key={label} {...menuItemProps}>
+      <a
+        href={url}
+        target={isBlank ? '_blank' : undefined}
+        role="menuitem"
+        className={menuItemStyle ?? defaultMenuItemStyle}
+        {...rest}
+      >
         {icon && <div>{icon}</div>}
         {label}
       </a>
-    </div>
+    </li>
   )
 }
+
+export default Dropdown
