@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import { cls } from '../utils/common'
 
 interface BreadcrumbItemType {
@@ -14,7 +15,7 @@ const Breadcrumb = ({ items }: BreadcrumbProps) => {
   return (
     <div className="my-8 flex items-center gap-4 text-11 leading-18">
       {items.map((item, idx) => (
-        <>
+        <Fragment>
           <a
             href={item.url}
             className={cls(
@@ -27,7 +28,7 @@ const Breadcrumb = ({ items }: BreadcrumbProps) => {
             {item.name}
           </a>
           {items.length > idx + 1 && <div className="text-gray-300">/</div>}
-        </>
+        </Fragment>
       ))}
     </div>
   )

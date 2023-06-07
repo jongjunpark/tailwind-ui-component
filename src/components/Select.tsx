@@ -1,4 +1,4 @@
-import type { ReactNode, ElementType, RefObject } from 'react'
+import { ReactNode, ElementType, RefObject, Fragment } from 'react'
 import { useEffect, useRef, useState } from 'react'
 
 import { Popover as HeadlessPopover } from '@headlessui/react'
@@ -152,7 +152,7 @@ export const Select = ({
 
   return (
     <HeadlessPopover className="relative h-full w-full">
-      <>
+      <Fragment>
         <HeadlessPopover.Button
           ref={setReferenceElement}
           className="h-full w-full focus:outline-none"
@@ -204,8 +204,8 @@ export const Select = ({
             {...panelProps}
           >
             {({ open, close }) => (
-              <>
-                {openHandle(open)}
+              <Fragment>
+                {/* {openHandle(open)} */}
                 <SelectItems
                   items={showSearch ? filteredItems : items}
                   inputItemStyle={inputItemStyle}
@@ -215,11 +215,11 @@ export const Select = ({
                   scrollBox={scrollBox}
                   selectedRef={selectedRef}
                 />
-              </>
+              </Fragment>
             )}
           </HeadlessPopover.Panel>
         </Transition>
-      </>
+      </Fragment>
     </HeadlessPopover>
   )
 }
@@ -242,7 +242,7 @@ const SelectItems = ({
   selectedRef?: RefObject<HTMLDivElement>
 }) => {
   return (
-    <>
+    <Fragment>
       {items.length > 0 ? (
         <div
           className="max-h-256 overflow-y-auto rounded bg-white p-4 shadow-lg"
@@ -264,6 +264,6 @@ const SelectItems = ({
           ))}
         </div>
       ) : null}
-    </>
+    </Fragment>
   )
 }

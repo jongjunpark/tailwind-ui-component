@@ -1,4 +1,4 @@
-import type { ReactNode, ElementType } from 'react'
+import { ReactNode, ElementType, Fragment } from 'react'
 import { useCallback, useRef, useState } from 'react'
 
 import { Popover as HeadlessPopover } from '@headlessui/react'
@@ -98,7 +98,7 @@ export const Tooltip = ({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <>
+      <Fragment>
         <HeadlessPopover.Button ref={setReferenceElement}>
           {children}
         </HeadlessPopover.Button>
@@ -133,7 +133,7 @@ export const Tooltip = ({
             )}
           </HeadlessPopover.Panel>
         </Transition>
-      </>
+      </Fragment>
     </HeadlessPopover>
   )
 }

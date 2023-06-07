@@ -92,7 +92,7 @@ const Dropdown = ({
   return (
     <HeadlessPopover className="relative" {...menuProps}>
       {({ open }) => (
-        <>
+        <Fragment>
           <HeadlessPopover.Button
             ref={setReferenceElement}
             className={cls(
@@ -125,7 +125,7 @@ const Dropdown = ({
               </Fragment>
             </HeadlessPopover.Panel>
           </Transition>
-        </>
+        </Fragment>
       )}
     </HeadlessPopover>
   )

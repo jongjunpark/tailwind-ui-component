@@ -1,4 +1,10 @@
-import type { Dispatch, SetStateAction, ElementType, ReactNode } from 'react'
+import {
+  Dispatch,
+  SetStateAction,
+  ElementType,
+  ReactNode,
+  Fragment,
+} from 'react'
 import { useEffect, useRef, useState } from 'react'
 
 import { Popover as HeadlessPopover } from '@headlessui/react'
@@ -96,7 +102,7 @@ export const Popover = ({
       )}
       <HeadlessPopover className="relative">
         {({ open, close }) => (
-          <>
+          <Fragment>
             <HeadlessPopover.Button
               ref={setReferenceElement}
               className="block w-full focus:outline-none"
@@ -117,13 +123,13 @@ export const Popover = ({
                 {...attributes.popper}
                 {...panelProps}
               >
-                <>
+                <Fragment>
                   <div onClick={close} ref={closeRef} />
                   {content}
-                </>
+                </Fragment>
               </HeadlessPopover.Panel>
             </Transition>
-          </>
+          </Fragment>
         )}
       </HeadlessPopover>
     </div>
