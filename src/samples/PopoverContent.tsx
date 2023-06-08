@@ -4,16 +4,16 @@ const PopoverContent = () => {
 
   return (
     <div className='w-400 rounded bg-white px-24 pb-20 pt-16'>
-      <h3 className='mb-8 text-lg font-extrabold'>카테고리별 검색</h3>
+      <h3 className='mb-8 text-lg font-extrabold'>검색</h3>
       <div className='flex flex-wrap gap-8'>
         <a href='/people' className={PopoverItemStyle}>
-          사람
+          유형1
         </a>
         <a className={PopoverItemStyle} href='/companies'>
-          기업
+          유형2
         </a>
         <a className={PopoverItemStyle} href='/jobs'>
-          채용
+          유형3
         </a>
       </div>
     </div>
