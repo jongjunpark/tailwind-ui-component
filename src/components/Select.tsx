@@ -190,7 +190,7 @@ const Select = ({
               </div>
             )}
             {placeholder && !showSearch && !selected && (
-              <div className="ellipsis w-full text-start text-rocket-hazeDark">
+              <div className="ellipsis w-full text-start text-gray-400">
                 {placeholder}
               </div>
             )}
@@ -253,8 +253,8 @@ const SelectItems = ({
             <div
               key={item.value}
               className={cls(
-                'cursor-pointer whitespace-nowrap px-16 py-8 text-sm transition hover:bg-rocket-ghostDark',
-                selected === item.value ? 'bg-rocket-ghost font-bold' : '',
+                'cursor-pointer whitespace-nowrap px-16 py-8 text-sm transition hover:bg-gray-200',
+                selected === item.value ? 'bg-gray-200/80 font-bold' : '',
                 inputItemStyle ?? '',
               )}
               onClick={() => handleClickItem(item, close)}

@@ -28,7 +28,7 @@ const Pagination = ({
         type="button"
         disabled={currentRatio === 1}
         onClick={() => changePage(1)}
-        className="flex h-40 w-40 cursor-pointer items-center justify-center hover:text-rocket-blue disabled:cursor-default disabled:text-rocket-haze"
+        className="flex h-40 w-40 cursor-pointer items-center justify-center hover:text-blue-500 disabled:cursor-default disabled:text-gray-300"
       >
         <ICONS.Next className="text-2xl" />
       </button>
@@ -36,7 +36,7 @@ const Pagination = ({
         type="button"
         disabled={currentRatio === 1}
         onClick={prevPage}
-        className="flex h-40 w-40 cursor-pointer items-center justify-center hover:text-rocket-blue disabled:cursor-default disabled:text-rocket-haze"
+        className="flex h-40 w-40 cursor-pointer items-center justify-center hover:text-blue-500 disabled:cursor-default disabled:text-gray-300"
       >
         <ICONS.ArrLeft className="text-2xl" />
       </button>
@@ -48,9 +48,9 @@ const Pagination = ({
               disabled={btnPage === page}
               onClick={() => changePage(btnPage)}
               className={cls(
-                'h-40 min-w-40 cursor-pointer px-4 text-sm text-black transition hover:text-rocket-blue disabled:cursor-default',
+                'h-40 min-w-40 cursor-pointer px-4 text-sm text-black transition hover:text-blue-500 disabled:cursor-default',
                 btnPage === page
-                  ? 'bg-blue-700 text-white hover:bg-rocket-blue'
+                  ? 'bg-blue-700 text-white hover:bg-blue-500'
                   : '',
               )}
             >
@@ -63,7 +63,7 @@ const Pagination = ({
         type="button"
         disabled={maxRatio === currentRatio}
         onClick={nextPage}
-        className="flex h-40 w-40 cursor-pointer items-center justify-center hover:text-rocket-blue disabled:cursor-default disabled:text-rocket-haze"
+        className="flex h-40 w-40 cursor-pointer items-center justify-center hover:text-blue-500 disabled:cursor-default disabled:text-gray-300"
       >
         <ICONS.ArrRight className="text-2xl" />
       </button>
@@ -71,7 +71,7 @@ const Pagination = ({
         type="button"
         disabled={maxRatio === currentRatio}
         onClick={() => changePage(maxPage)}
-        className="flex h-40 w-40 cursor-pointer items-center justify-center hover:text-rocket-blue disabled:cursor-default disabled:text-rocket-haze"
+        className="flex h-40 w-40 cursor-pointer items-center justify-center hover:text-blue-500 disabled:cursor-default disabled:text-gray-300"
       >
         <ICONS.Prev className="text-2xl" />
       </button>

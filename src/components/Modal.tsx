@@ -153,7 +153,7 @@ const Header = ({
     <Dialog.Title
       as="h3"
       className={cls(
-        'border-b border-rocket-haze px-24 py-16 font-bold',
+        'border-b border-gray-300 px-24 py-16 font-bold',
         titleStyle ?? '',
       )}
       {...titleProps}

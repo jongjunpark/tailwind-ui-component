@@ -7,7 +7,7 @@
     @apply cursor-pointer transition;
   }
   a:hover {
-    @apply text-rocket-blue;
+    @apply text-blue-500;
   }
   a > * {
     color: initial;
@@ -27,7 +27,7 @@
     outline: none;
     border-color: #4e61ff;
   }
-  
+
   .scrollbar::-webkit-scrollbar {
     width: 10px;
   }
@@ -73,7 +73,7 @@
     @apply h-0 w-0 opacity-0;
   }
   .switch > div {
-    @apply absolute top-1/2 h-14 w-full -translate-y-1/2 cursor-pointer rounded-lg bg-rocket-haze transition;
+    @apply absolute top-1/2 h-14 w-full -translate-y-1/2 cursor-pointer rounded-lg bg-gray-300 bg-gray transition;
   }
   .switch > div::before {
     @apply absolute left-0 top-1/2 h-20 w-20 -translate-y-1/2 rounded-full bg-white transition content-[""];
@@ -81,19 +81,19 @@
       0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.14);
   }
   .switch > input:checked + div {
-    @apply bg-rocket-blueLight/60;
+    @apply bg-blue-400/60;
   }
   .switch > input:focus + div {
     box-shadow: 0 0 1px rgb(111 141 255 / 0.6);
   }
   .switch > input:checked + div::before {
-    @apply -translate-y-1/2 translate-x-12 bg-rocket-blue;
+    @apply -translate-y-1/2 translate-x-12 bg-blue-500;
   }
   .switch > input:disabled + div {
     @apply cursor-not-allowed;
   }
   .switch > input:disabled + div::before {
-    @apply bg-rocket-ghostDark;
+    @apply bg-gray-200;
   }
 }
 
