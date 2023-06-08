@@ -1,4 +1,5 @@
 export { default as Breadcrumb } from './Breadcrumb'
+export { default as Disclosure } from './Disclosure'
 export { default as Dropdown } from './Dropdown'
 export { default as Modal } from './Modal'
 export { default as Pagination } from './Pagination'

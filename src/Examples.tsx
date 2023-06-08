@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import {
   Dropdown,
+  Disclosure,
   Popover,
   Modal,
   Tooltip,
@@ -254,6 +255,39 @@ export default function Examples() {
           nextPage={fn.nextPage}
         />
       </div>
+      <Disclosure
+        wrapStyle='flex flex-col gap-12'
+        items={[
+          {
+            heading: (
+              <div className='flex cursor-pointer items-center gap-4 text-blue-500'>
+                <span>더보기</span>
+                <ICONS.ChevronDown className='text-xs' />
+              </div>
+            ),
+            content: (
+              <div>
+                <p className='text-2xl'>text1</p>
+                <p className='text-xl'>text2</p>
+              </div>
+            ),
+          },
+          {
+            heading: (
+              <div className='flex cursor-pointer items-center gap-4 text-blue-500'>
+                <span>더보기2</span>
+                <ICONS.ChevronDown className='text-xs' />
+              </div>
+            ),
+            content: (
+              <div>
+                <p className='text-2xl'>text1</p>
+                <p className='text-xl'>text2</p>
+              </div>
+            ),
+          },
+        ]}
+      />
     </Container>
   )
 }
@@ -299,11 +333,11 @@ const exampleData: [string, string, string][] = [
     'from-white to-white',
     '컨텐츠를 여러 페이지로 분리하여 탐색 및 이동할 수 있도록 도와주는데에 사용',
   ],
-  // [
-  //   'Disclosure',
-  //   'from-white to-white',
-  //   '일부 컨텐츠를 숨겨두었다가 펼쳐서 표현하는데에 사용',
-  // ],
+  [
+    'Disclosure',
+    'from-white to-white',
+    '일부 컨텐츠를 숨겨두었다가 펼쳐서 표현하는데에 사용',
+  ],
   // [
   //   'Switch',
   //   'from-white to-white',
