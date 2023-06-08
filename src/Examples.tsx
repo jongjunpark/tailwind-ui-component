@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import {
   Dropdown,
-  Disclosure,
   Popover,
   Modal,
   Tooltip,
@@ -9,6 +8,8 @@ import {
   Breadcrumb,
   Select,
   Pagination,
+  Disclosure,
+  Switch
 } from './components'
 import ICONS from './icons'
 import usePagination from './hooks/usePagination'
@@ -39,6 +40,7 @@ export default function Examples() {
   const [sidebarShow, setSidebarShow] = useState<boolean>(false);
   const [selectValue, setSelectValue] = useState<string>('');
   const [contents, setContents] = useState<ContentType[]>([]);
+  const [checked, setChecked] = useState<boolean>(false);
   const {
     page,
     pageButtons,
@@ -288,6 +290,20 @@ export default function Examples() {
           },
         ]}
       />
+      <div>
+        <h3>Switch : {checked ? 'on' : 'off'}</h3>
+        <div className='mt-4'>
+          <Switch
+            checked={checked}
+            onClick={() => setChecked(!checked)}
+            onChange={() => console.log('switching!')}
+          />
+        </div>
+        <h3 className='mt-16'>Switch : disabled</h3>
+        <div className='mt-4'>
+          <Switch disabled />
+        </div>
+      </div>
     </Container>
   )
 }
@@ -338,11 +354,11 @@ const exampleData: [string, string, string][] = [
     'from-white to-white',
     '일부 컨텐츠를 숨겨두었다가 펼쳐서 표현하는데에 사용',
   ],
-  // [
-  //   'Switch',
-  //   'from-white to-white',
-  //   '스위치 형식으로 ON / OFF를 제어할때에 사용',
-  // ],
+  [
+    'Switch',
+    'from-white to-white',
+    '스위치 형식으로 ON / OFF를 제어할때에 사용',
+  ],
 ]
 
 type ExampleProps = {

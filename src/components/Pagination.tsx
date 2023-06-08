@@ -50,7 +50,7 @@ const Pagination = ({
               className={cls(
                 'h-40 min-w-40 cursor-pointer px-4 text-sm text-black transition hover:text-blue-500 disabled:cursor-default',
                 btnPage === page
-                  ? 'bg-blue-700 text-white hover:bg-blue-500'
+                  ? 'bg-blue-700 !text-white'
                   : '',
               )}
             >

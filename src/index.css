@@ -73,7 +73,7 @@
     @apply h-0 w-0 opacity-0;
   }
   .switch > div {
-    @apply absolute top-1/2 h-14 w-full -translate-y-1/2 cursor-pointer rounded-lg bg-gray-300 bg-gray transition;
+    @apply absolute top-1/2 h-14 w-full -translate-y-1/2 cursor-pointer rounded-lg bg-gray-300 transition;
   }
   .switch > div::before {
     @apply absolute left-0 top-1/2 h-20 w-20 -translate-y-1/2 rounded-full bg-white transition content-[""];
